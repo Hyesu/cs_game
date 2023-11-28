@@ -1,1 +1,7 @@
-# ignores
+# common source ignores
+**/.vs/*
+**/bin/*
+**/obj/*
+**/.editorconfig
+**/.idea/*
+**/*.user
