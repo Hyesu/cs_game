@@ -1,4 +1,7 @@
-﻿namespace HEngine
+﻿using System.IO;
+using System.Linq;
+
+namespace HEngine
 {
     public static class HPath
     {

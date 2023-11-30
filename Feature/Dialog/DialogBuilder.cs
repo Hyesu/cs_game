@@ -1,4 +1,5 @@
-﻿using DesignTable.Entry;
+﻿using System.Collections.Generic;
+using DesignTable.Entry;
 
 namespace Feature.Dialog
 {
