@@ -1,6 +1,5 @@
-﻿using System;
+﻿using HEngine.Extensions;
 using Newtonsoft.Json.Linq;
-using DesignTable.Extensions;
 
 namespace DesignTable.Core
 {
@@ -17,7 +16,7 @@ namespace DesignTable.Core
 
         public virtual void Initialize(JObject entryObj)
         {
-            throw new NotImplementedException($"not implemented ency-entry");
+            throw new InvalidOperationException($"not implemented ency-entry");
         }
     }
 }

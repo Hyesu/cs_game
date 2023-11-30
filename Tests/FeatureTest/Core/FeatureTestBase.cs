@@ -1,4 +1,5 @@
 ﻿using DesignTable.Core;
+using HEngine;
 
 namespace FeatureTest;
 
@@ -8,7 +9,8 @@ public class FeatureTestBase
 
     public FeatureTestBase()
     {
-        D = new DContext("../../../../../../client/Assets/Resources/DesignDatas/");
+        var config = HConfiguration.Instance();
+        D = new DContext(config.DesignTableRoot);
         D.Initialize();
     }
 }

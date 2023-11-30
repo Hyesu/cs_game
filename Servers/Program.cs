@@ -1,11 +1,10 @@
-﻿using System.Configuration;
+﻿using HEngine;
 using DesignTable.Core;
 
 Console.WriteLine("==================== Start Server ====================");
 
-// TODO: app config가 아닌 별도 파일 통해서 setting 설정할 수 있도록 수정 필요
 // load design table
-var ddRoot = ConfigurationManager.AppSettings["DesignDataRoot"];
+var ddRoot = HConfiguration.Instance().DesignTableRoot;
 if (null == ddRoot)
     throw new InvalidDataException($"not found app setting - DesignDataRoot");
 

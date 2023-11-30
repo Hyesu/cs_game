@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 
-namespace DesignTable.Extensions
+namespace HEngine.Extensions
 {
     public static class JsonExtensions
     {

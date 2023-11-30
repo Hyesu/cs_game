@@ -29,7 +29,7 @@ namespace DesignTable.Core
 
         protected virtual DEntry CreateEntry(JObject entry)
         {
-            throw new NotImplementedException($"not implemented ency-section entry creator");
+            throw new InvalidOperationException($"not implemented ency-section entry creator");
         }
 
         public virtual void Initialize(IList<JObject> jsonObjs)
