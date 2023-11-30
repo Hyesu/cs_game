@@ -11,37 +11,40 @@ namespace HEngine
 
         public string DesignTableRoot { get; private set; }
     
-        public static HConfiguration Instance()
+        public static HConfiguration Instance
         {
-            if (null == _instance)
+            get
             {
-                var filePath = HPath.FindFilePathByRecursively(AppDomain.CurrentDomain.BaseDirectory, "settings.json");
-                if (string.IsNullOrEmpty(filePath))
+                if (null == _instance)
                 {
-                    throw new FileNotFoundException($"cannot find setting.json");
-                }
-            
-                using (var sr = new StreamReader(filePath))
-                {
-                    string json = sr.ReadToEnd();
-                    var jsonObj = JObject.Parse(json);
-
-                    var configuration = new HConfiguration
+                    var filePath = HPath.FindFilePathByRecursively(AppDomain.CurrentDomain.BaseDirectory, "settings.json");
+                    if (string.IsNullOrEmpty(filePath))
                     {
-                        DesignTableRoot = jsonObj.GetString("DesignTableRoot"),
-                    };
+                        throw new FileNotFoundException($"cannot find setting.json");
+                    }
+            
+                    using (var sr = new StreamReader(filePath))
+                    {
+                        string json = sr.ReadToEnd();
+                        var jsonObj = JObject.Parse(json);
 
-                    _instance = configuration;
+                        var configuration = new HConfiguration
+                        {
+                            DesignTableRoot = jsonObj.GetString("DesignTableRoot"),
+                        };
+
+                        _instance = configuration;
+                    }
                 }
-            }
 
-            return _instance;
+                return _instance;
+            }
         }
 
         public static void Init()
         {
             // ready
-            HConfiguration.Instance();
+            _ = HConfiguration.Instance;
         }
     }   
 }

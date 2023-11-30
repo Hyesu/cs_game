@@ -4,7 +4,7 @@ using DesignTable.Core;
 Console.WriteLine("==================== Start Server ====================");
 
 // load design table
-var ddRoot = HConfiguration.Instance().DesignTableRoot;
+var ddRoot = HConfiguration.Instance.DesignTableRoot;
 if (null == ddRoot)
     throw new InvalidDataException($"not found app setting - DesignDataRoot");
 

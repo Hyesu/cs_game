@@ -9,8 +9,7 @@ public class FeatureTestBase
 
     public FeatureTestBase()
     {
-        var config = HConfiguration.Instance();
-        D = new DContext(config.DesignTableRoot);
+        D = new DContext(HConfiguration.Instance.DesignTableRoot);
         D.Initialize();
     }
 }
