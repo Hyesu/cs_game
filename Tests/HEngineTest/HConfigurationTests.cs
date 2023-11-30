@@ -1,4 +1,4 @@
-using HEngine;
+using HEngine.Core;
 
 namespace HEngineTest;
 

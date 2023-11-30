@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
-using HEngine.Extensions;
 using Newtonsoft.Json.Linq;
+using HEngine.Extensions;
+using HEngine.Utility;
 
-namespace HEngine
+namespace HEngine.Core
 {
     public class HConfiguration
     {

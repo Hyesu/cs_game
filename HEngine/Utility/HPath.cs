@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace HEngine
+namespace HEngine.Utility
 {
     public static class HPath
     {
