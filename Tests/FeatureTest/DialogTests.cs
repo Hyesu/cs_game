@@ -5,7 +5,7 @@ namespace FeatureTest;
 
 public class DialogTests : FeatureTestBase
 {
-    private class TestDlgHandler : IDialogHandler
+    private class DlgHandlerSpy : IDialogHandler
     {
         public bool Started { get; private set; }
         public int UpdatedCnt { get; private set; }
@@ -27,7 +27,7 @@ public class DialogTests : FeatureTestBase
         }
     }
 
-    private class TestDlgParticipant : IDialogParticipant
+    private class DlgParticipantSpy : IDialogParticipant
     {
         public readonly string Key;
 
@@ -35,7 +35,7 @@ public class DialogTests : FeatureTestBase
         public bool Ended { get; private set; }
         public bool Active { get; private set; }
 
-        public TestDlgParticipant(string key)
+        public DlgParticipantSpy(string key)
         {
             Key = key;
         }
@@ -71,10 +71,10 @@ public class DialogTests : FeatureTestBase
     public void TestNext()
     {
         var dDlg = D.RandomDialog();
-        var handler = new TestDlgHandler();
+        var handler = new DlgHandlerSpy();
         var participants = dDlg.Speeches
             .DistinctBy(x => x.Character)
-            .Select(x => new TestDlgParticipant(x.Character))
+            .Select(x => new DlgParticipantSpy(x.Character))
             .ToList();
 
         var context = DialogBuilder.Of(dDlg)
