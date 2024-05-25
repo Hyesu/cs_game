@@ -45,7 +45,7 @@ namespace HEngine.Core
         public static void Init()
         {
             // ready
-            _ = HConfiguration.Instance;
+            _ = Instance;
         }
     }   
 }

@@ -1,0 +1,31 @@
+{
+  "Id": 1,
+  "StrId": "dlg_sample",
+  "Type": "Conversation",
+  "Speeches": [
+    {
+      "Key" : "optional key for jump",
+      "Character" : "key of character",
+      "Pivot" : "pivot for placing character in screen",
+      "Emotion" : "emotion",
+      "Test" : "text for speech",
+      
+      "JumpKey" : "key to jump",
+      "Choices" : [
+        {
+          "Text" : "text",
+          "Key" : "key to jump when chosen"
+        },
+        {
+          "Text" : "text2",
+          "Key" : "key to jump when chosen"
+        }
+      ]
+    },
+    {
+      "Key" : "key to jump when chosen",
+      "Character" : "character_2",
+      "Text" : "sample dialog speech"
+    }
+  ]
+}

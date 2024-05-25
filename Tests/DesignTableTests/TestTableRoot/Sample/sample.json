@@ -1,0 +1,6 @@
+{
+  "Id" : 1,
+  "StrId" : "sample",
+  "NumberField" : 2,
+  "StringField" : "some string"
+}

@@ -7,3 +7,4 @@ settings.json
 **/.editorconfig
 **/.idea/*
 **/*.user
+**/*.DS_Store

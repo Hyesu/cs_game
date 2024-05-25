@@ -13,10 +13,10 @@ namespace DesignTable.Core
         private readonly string _rootPath;
         private readonly Dictionary<Type, DTable> _tables;
 
-        public IEnumerable<DTable> Sections => _tables.Values;
+        public IEnumerable<DTable> Tables => _tables.Values;
 
         // indexes ///////////////////
-        public readonly DCharacterTable Character;
+        public readonly DSampleTable Sample;
         public readonly DDialogTable Dialog;
         //////////////////////////////
 
@@ -26,20 +26,20 @@ namespace DesignTable.Core
             _tables = new();
 
             // create indexes
-            Character = Add(new DCharacterTable("Character"));
+            Sample = Add(new DSampleTable("Sample"));
             Dialog = Add(new DDialogTable("Dialog"));
         }
 
         public void Initialize()
         {
             var sectionTasks = _tables.Values
-                .Select(x => LoadTableAsync(x));
+                .Select(LoadTableAsync);
 
             Task.WaitAll(sectionTasks.ToArray());
 
-            foreach (var section in _tables.Values)
+            foreach (var table in _tables.Values)
             {
-                section.PostInitialize(_tables);
+                table.PostInitialize(_tables);
             }
         }
 
