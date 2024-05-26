@@ -19,16 +19,18 @@ namespace DesignTable.Core
         public readonly DDialogTable Dialog;
         //////////////////////////////
 
+        // supported parsers
+        protected DJsonParser _jsonParser;
+        
         public DContext(string rootPath)
         {
             _rootPath = rootPath;
             _tables = new();
-
-            var jsonParser = new DJsonParser();
+            _jsonParser = new DJsonParser();
 
             // create indexes
-            Sample = Add(new DSampleTable("Sample", jsonParser));
-            Dialog = Add(new DDialogTable("Dialog", jsonParser));
+            Sample = Add(new DSampleTable("Sample", _jsonParser));
+            Dialog = Add(new DDialogTable("Dialog", _jsonParser));
         }
 
         public void Initialize()
