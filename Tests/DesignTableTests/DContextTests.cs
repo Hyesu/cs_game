@@ -6,8 +6,10 @@ namespace DesignTableTests;
 
 public class DContextTests
 {
-    [Test]
-    public void TestDialogTable()
+    private DContext _ctx;
+
+    [SetUp]
+    public void OnSetUp()
     {
         var filePath = HPath.FindFilePathByRecursively(AppDomain.CurrentDomain.BaseDirectory, "DContextTests.cs");
         if (null == filePath)
@@ -15,18 +17,23 @@ public class DContextTests
 
         var tokens = filePath.Split("/");
         var dtRoot = $"{string.Join("/", tokens.Take(tokens.Length - 1))}/TestTableRoot/";
-        var dt = new DContext(dtRoot);
-        dt.Initialize();
-        
-        foreach (var section in dt.Tables)
+        _ctx = new DContext(dtRoot);
+        _ctx.Initialize();
+    }
+    
+    ///////////////////////
+    [Test]
+    public void TestDialogTable()
+    {
+        foreach (var table in _ctx.Tables)
         {
-            foreach (var entry in section.All)
+            foreach (var entry in table.All)
             {
-                Console.WriteLine($"table({section.Name}) - id({entry.Id}) strId({entry.StrId})");
+                Console.WriteLine($"table({table.Name}) - id({entry.Id}) strId({entry.StrId})");
             }
         }
 
-        var dlg = dt.Dialog.GetByStrId("dlg_sample");
+        var dlg = _ctx.Dialog.GetByStrId("dlg_sample");
         Console.WriteLine($"dlg({dlg.StrId}) type({dlg.Type})");
         foreach (var speech in dlg.Speeches)
         {
