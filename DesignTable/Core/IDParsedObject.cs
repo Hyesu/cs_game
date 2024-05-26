@@ -4,6 +4,11 @@ namespace DesignTable.Core;
 
 public interface IDParsedObject
 {
+    void Initialize(string serialized);
+
+    int GetId();
+    string GetStrId();
+    
     string GetString(string fieldName);
     
     int GetInt(string fieldName);

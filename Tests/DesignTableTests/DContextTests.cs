@@ -23,7 +23,7 @@ public class DContextTests
     
     ///////////////////////
     [Test]
-    public void TestDialogTable()
+    public void TestJsonTable()
     {
         foreach (var table in _ctx.Tables)
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using DesignTable.Parser;
 using Newtonsoft.Json.Linq;
 using DesignTable.Table;
 
@@ -25,9 +26,11 @@ namespace DesignTable.Core
             _rootPath = rootPath;
             _tables = new();
 
+            var jsonParser = new DJsonParser();
+
             // create indexes
-            Sample = Add(new DSampleTable("Sample"));
-            Dialog = Add(new DDialogTable("Dialog"));
+            Sample = Add(new DSampleTable("Sample", jsonParser));
+            Dialog = Add(new DDialogTable("Dialog", jsonParser));
         }
 
         public void Initialize()
@@ -46,19 +49,8 @@ namespace DesignTable.Core
         private async Task<string> LoadTableAsync(DTable table)
         {
             var tablePath = _rootPath + table.Path;
-            var filePaths = Directory.EnumerateFiles(tablePath, "*.json");
-            var jsonObjs = new List<JObject>();
-            foreach (var filePath in filePaths)
-            {
-                using (var sr = new StreamReader(filePath))
-                {
-                    string json = await sr.ReadToEndAsync();
-                    var jsonObj = JObject.Parse(json);
-                    jsonObjs.Add(jsonObj);
-                }
-            }
-
-            table.Initialize(jsonObjs);
+            var parsedObjs = await table.Parser.ParseAsync(tablePath);
+            table.Initialize(parsedObjs);
             return table.Name;
         }
 

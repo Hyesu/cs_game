@@ -6,14 +6,14 @@ namespace DesignTable.Table
 {
     public class DSampleTable : DTable
     {
-        public DSampleTable(string path)
-            : base(nameof(DSampleTable), path)
+        public DSampleTable(string path, IDParser parser)
+            : base(nameof(DSampleTable), path, parser)
         {
         }
 
-        protected override DEntry CreateEntry(JObject jsonObj)
+        protected override DEntry CreateEntry(IDParsedObject dParsedObject)
         {
-            return new DSampleEntry(jsonObj);
+            return new DSampleEntry(dParsedObject);
         }
 
         public DSampleEntry Get(int id)

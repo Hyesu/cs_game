@@ -9,13 +9,13 @@ namespace DesignTable.Core
         public readonly int Id;
         public readonly string StrId;
 
-        public DEntry(JObject json)
+        public DEntry(IDParsedObject parsedObject)
         {
-            Id = json.GetInt("Id");
-            StrId = json.GetString("StrId");
+            Id = parsedObject.GetId();
+            StrId = parsedObject.GetStrId();
         }
 
-        public virtual void Initialize(JObject entryObj)
+        public virtual void Initialize(IDParsedObject parsedObject)
         {
             throw new InvalidOperationException($"not implemented ency-entry");
         }

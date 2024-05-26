@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 using DesignTable.Core;
-using HEngine.Extensions;
 
 namespace DesignTable.Entry
 {
@@ -17,10 +15,10 @@ namespace DesignTable.Entry
         public readonly string Text;
         public readonly string Key;
 
-        public DDialogChoice(JObject json)
+        public DDialogChoice(IDParsedObject parsedObject)
         {
-            Text = json.GetString("Text");
-            Key = json.GetString("Key");
+            Text = parsedObject.GetString("Text");
+            Key = parsedObject.GetString("Key");
         }
     }
 
@@ -36,16 +34,16 @@ namespace DesignTable.Entry
         public readonly string JumpKey;
         public readonly List<DDialogChoice> Choices;
 
-        public DDialogSpeech(JObject json)
+        public DDialogSpeech(IDParsedObject parsedObject)
         {
-            Key = json.GetString("Key") ?? string.Empty;
-            Character = json.GetString("Character");
-            Pivot = json.GetString("Pivot") ?? "Center";
-            Emotion = json.GetString("Emotion") ?? "Idle";
-            Text = json.GetString("Text") ?? string.Empty;
+            Key = parsedObject.GetString("Key") ?? string.Empty;
+            Character = parsedObject.GetString("Character");
+            Pivot = parsedObject.GetString("Pivot") ?? "Center";
+            Emotion = parsedObject.GetString("Emotion") ?? "Idle";
+            Text = parsedObject.GetString("Text") ?? string.Empty;
 
-            JumpKey = json.GetString("JumpKey") ?? string.Empty;
-            Choices = json.GetObjArray("Choices")
+            JumpKey = parsedObject.GetString("JumpKey") ?? string.Empty;
+            Choices = parsedObject.GetObjArray("Choices")
                 .Select(x => new DDialogChoice(x))
                 .ToList();
         }
@@ -56,11 +54,11 @@ namespace DesignTable.Entry
         public readonly DialogType Type;
         public readonly List<DDialogSpeech> Speeches;
 
-        public DDialog(JObject json)
-            : base(json)
+        public DDialog(IDParsedObject parsedObject)
+            : base(parsedObject)
         {
-            Type = json.GetEnum<DialogType>("Type");
-            Speeches = json.GetObjArray("Speeches")
+            Type = parsedObject.GetEnum<DialogType>("Type");
+            Speeches = parsedObject.GetObjArray("Speeches")
                 .Select(x => new DDialogSpeech(x))
                 .ToList();
         }

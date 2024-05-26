@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 
 namespace DesignTable.Core
 {
@@ -10,31 +9,35 @@ namespace DesignTable.Core
     {
         private readonly string _name;
         private readonly string _path;
+        private readonly IDParser _parser;
 
         private readonly Dictionary<int, DEntry> _entries;
         private readonly Dictionary<string, DEntry> _entriesByStrId;
 
         public string Name => _name;
         public string Path => _path;
+        public IDParser Parser => _parser;
         public IEnumerable<DEntry> All => _entries.Values;
 
-        public DTable(string name, string path)
+        public DTable(string name, string path, IDParser parser)
         {
             _name = name;
             _path = path;
+            _parser = parser;
 
             _entries = new();
             _entriesByStrId = new();
         }
 
-        protected virtual DEntry CreateEntry(JObject entry)
+        protected virtual DEntry CreateEntry(IDParsedObject parsedObject)
         {
             throw new InvalidOperationException($"not implemented ency-section entry creator");
         }
 
-        public virtual void Initialize(IList<JObject> jsonObjs)
+        public virtual void Initialize(IEnumerable<IDParsedObject> parsedObjects)
         {
-            var entries = jsonObjs.Select(x => CreateEntry(x));
+            var entries = parsedObjects
+                .Select(CreateEntry);
             foreach (var entry in entries)
             {
                 AddEntry(entry);

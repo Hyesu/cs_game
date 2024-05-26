@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json.Linq;
-using DesignTable.Core;
-using HEngine.Extensions;
+﻿using DesignTable.Core;
 
 namespace DesignTable.Entry
 {
@@ -11,11 +7,11 @@ namespace DesignTable.Entry
         public readonly int NumberField;
         public readonly string StringField;
 
-        public DSampleEntry(JObject json)
-            : base(json)
+        public DSampleEntry(IDParsedObject parsedObject)
+            : base(parsedObject)
         {
-            NumberField = json.GetInt("NumberField");
-            StringField = json.GetString("StringField");
+            NumberField = parsedObject.GetInt("NumberField");
+            StringField = parsedObject.GetString("StringField");
         }
     }
 }

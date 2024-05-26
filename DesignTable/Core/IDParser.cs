@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DesignTable.Core;
 
 public interface IDParser
 {
-    IEnumerable<IDParsedObject> Parse(string tablePath);
+    Task<IEnumerable<IDParsedObject>> ParseAsync(string tablePath);
 }

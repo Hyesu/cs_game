@@ -6,14 +6,14 @@ namespace DesignTable.Table
 {
     public class DDialogTable : DTable
     {
-        public DDialogTable(string path)
-            : base(nameof(DDialogTable), path)
+        public DDialogTable(string path, IDParser parser)
+            : base(nameof(DDialogTable), path, parser)
         {
         }
 
-        protected override DEntry CreateEntry(JObject jsonObj)
+        protected override DEntry CreateEntry(IDParsedObject parsedObject)
         {
-            return new DDialog(jsonObj);
+            return new DDialog(parsedObject);
         }
 
         public DDialog Get(int id)
