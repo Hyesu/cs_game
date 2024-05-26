@@ -1,13 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
-using DesignTable.Core;
+﻿using DesignTable.Core;
 using DesignTable.Entry;
 
 namespace DesignTable.Table
 {
     public class DDialogTable : DTable
     {
-        public DDialogTable(string path, IDParser parser)
-            : base(nameof(DDialogTable), path, parser)
+        public DDialogTable(string dirName, IDParser parser)
+            : base(nameof(DDialogTable), dirName, parser)
         {
         }
 

@@ -5,5 +5,5 @@ namespace DesignTable.Core;
 
 public interface IDParser
 {
-    Task<IEnumerable<IDParsedObject>> ParseAsync(string tablePath);
+    Task<IEnumerable<IDParsedObject>> ParseAsync(string tablePath, string dirName);
 }

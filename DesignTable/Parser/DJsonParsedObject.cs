@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Nodes;
 using Newtonsoft.Json.Linq;
 using DesignTable.Core;
 
@@ -7,24 +8,22 @@ namespace DesignTable.Parser;
 
 public class DJsonParsedObject : IDParsedObject
 {
+    private readonly JObject _json;
+    
     private int _id;
     private string _strId;
-    
-    private JObject _json;
-    
-    public void Initialize(string serialized)
-    {
-        _json = JObject.Parse(serialized);
-        
-        _id = GetInt("Id");
-        _strId = GetString("StrId");
-    }
 
-    private void Of(JObject json)
+    public DJsonParsedObject(JObject json)
     {
+        _json = json;
         _id = 0;
         _strId = string.Empty;
-        _json = json;
+    }
+    
+    public void Initialize()
+    {   
+        _id = GetInt("Id");
+        _strId = GetString("StrId");
     }
 
     public int GetId()
@@ -93,11 +92,6 @@ public class DJsonParsedObject : IDParsedObject
 
         return value.ToArray()
             .Select(x => x.ToObject<JObject>())
-            .Select(x =>
-            {
-                var parsed = new DJsonParsedObject();
-                parsed.Of(x);
-                return parsed;
-            });
+            .Select(x => new DJsonParsedObject(x));
     }
 }

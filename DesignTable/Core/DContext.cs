@@ -48,8 +48,8 @@ namespace DesignTable.Core
 
         private async Task<string> LoadTableAsync(DTable table)
         {
-            var tablePath = _rootPath + table.Path;
-            var parsedObjs = await table.Parser.ParseAsync(tablePath);
+            var tablePath = _rootPath + table.DirName;
+            var parsedObjs = await table.Parser.ParseAsync(tablePath, table.Name);
             table.Initialize(parsedObjs);
             return table.Name;
         }

@@ -6,8 +6,8 @@ namespace DesignTable.Table
 {
     public class DSampleTable : DTable
     {
-        public DSampleTable(string path, IDParser parser)
-            : base(nameof(DSampleTable), path, parser)
+        public DSampleTable(string dirName, IDParser parser)
+            : base(nameof(DSampleTable), dirName, parser)
         {
         }
 

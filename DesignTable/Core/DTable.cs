@@ -8,21 +8,21 @@ namespace DesignTable.Core
     public class DTable
     {
         private readonly string _name;
-        private readonly string _path;
+        private readonly string _dirName;
         private readonly IDParser _parser;
 
         private readonly Dictionary<int, DEntry> _entries;
         private readonly Dictionary<string, DEntry> _entriesByStrId;
 
         public string Name => _name;
-        public string Path => _path;
+        public string DirName => _dirName;
         public IDParser Parser => _parser;
         public IEnumerable<DEntry> All => _entries.Values;
 
-        public DTable(string name, string path, IDParser parser)
+        public DTable(string name, string dirName, IDParser parser)
         {
             _name = name;
-            _path = path;
+            _dirName = dirName;
             _parser = parser;
 
             _entries = new();
