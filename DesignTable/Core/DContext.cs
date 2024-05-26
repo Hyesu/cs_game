@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DesignTable.Parser;
-using Newtonsoft.Json.Linq;
 using DesignTable.Table;
 
 namespace DesignTable.Core
