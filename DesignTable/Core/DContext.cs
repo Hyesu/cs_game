@@ -11,7 +11,7 @@ namespace DesignTable.Core
     public class DContext
     {
         private readonly string _rootPath;
-        private readonly Dictionary<Type, DTable> _tables;
+        protected readonly Dictionary<Type, DTable> _tables;
 
         public IEnumerable<DTable> Tables => _tables.Values;
 
@@ -62,7 +62,7 @@ namespace DesignTable.Core
             return table.Name;
         }
 
-        private T Add<T>(T table) where T : DTable
+        protected T Add<T>(T table) where T : DTable
         {
             _tables.Add(typeof(T), table);
             return table;
