@@ -1,5 +1,4 @@
 using DesignTable.Core;
-using HEngine.Core;
 using HEngine.Utility;
 
 namespace DesignTableTests;
@@ -39,5 +38,16 @@ public class DContextTests
         {
             Console.WriteLine($"-- {speech.Character} : {speech.Text} // emotion({speech.Emotion})");
         }
+    }
+
+    [Test]
+    public void TestXmlTable()
+    {
+        Assert.That(_ctx.Sample.All.Count(), Is.GreaterThan(0));
+
+        var sample = _ctx.Sample.Get(1); 
+        Assert.That(sample, Is.Not.Null);
+        Assert.That(sample.NumberField, Is.GreaterThan(0));
+        Assert.That(sample.StringField, Is.Not.Null);
     }
 }

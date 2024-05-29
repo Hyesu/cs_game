@@ -13,11 +13,11 @@ public class DXmlParsedObject : IDParsedObject
     private readonly int _id;
     private readonly string _strId;
     
-    public DXmlParsedObject(XElement element, int id, string strId)
+    public DXmlParsedObject(XElement element)
     {
         _element = element;
-        _id = id;
-        _strId = strId;
+        _id = int.Parse(element.Attribute("Id")!.Value);
+        _strId = element.Attribute("StrId")!.Value;
     }
     
     public int GetId()
@@ -32,7 +32,7 @@ public class DXmlParsedObject : IDParsedObject
 
     public string GetString(string fieldName)
     {
-        return _element.Attribute(fieldName)?.ToString() ?? string.Empty;
+        return _element.Attribute(fieldName)?.Value ?? string.Empty;
     }
 
     public int GetInt(string fieldName)

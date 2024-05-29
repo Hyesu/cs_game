@@ -18,19 +18,18 @@ namespace DesignTable.Core
         public readonly DSampleTable Sample;
         public readonly DDialogTable Dialog;
         //////////////////////////////
-
-        // supported parsers
-        protected DJsonParser _jsonParser;
         
         public DContext(string rootPath)
         {
             _rootPath = rootPath;
             _tables = new();
-            _jsonParser = new DJsonParser();
+            
+            var jsonParser = new DJsonParser();
+            var xmlParser = new DXmlParser();
 
             // create indexes
-            Sample = Add(new DSampleTable("Sample", _jsonParser));
-            Dialog = Add(new DDialogTable("Dialog", _jsonParser));
+            Sample = Add(new DSampleTable("Sample", xmlParser));
+            Dialog = Add(new DDialogTable("Dialog", jsonParser));
         }
 
         public void Initialize()
@@ -48,7 +47,7 @@ namespace DesignTable.Core
 
         private async Task<string> LoadTableAsync(DTable table)
         {
-            var tablePath = _rootPath + table.DirName;
+            var tablePath = _rootPath + table.Name;
             var parsedObjs = await table.Parser.ParseAsync(tablePath, table.Name);
             table.Initialize(parsedObjs);
             return table.Name;

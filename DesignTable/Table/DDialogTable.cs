@@ -5,11 +5,11 @@ namespace DesignTable.Table
 {
     public class DDialogTable : DTable
     {
-        public DDialogTable(string dirName, IDParser parser)
-            : base(nameof(DDialogTable), dirName, parser)
+        public DDialogTable(string name, IDParser parser)
+            : base(name, parser)
         {
         }
-
+        
         protected override DEntry CreateEntry(IDParsedObject parsedObject)
         {
             return new DDialog(parsedObject);

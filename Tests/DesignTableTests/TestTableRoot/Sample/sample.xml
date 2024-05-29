@@ -1,0 +1,3 @@
+<Samples>
+  <Sample Id="1" StrId="sample" NumberField="529" StringField="birthday" />
+</Samples>

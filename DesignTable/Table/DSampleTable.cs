@@ -6,11 +6,11 @@ namespace DesignTable.Table
 {
     public class DSampleTable : DTable
     {
-        public DSampleTable(string dirName, IDParser parser)
-            : base(nameof(DSampleTable), dirName, parser)
+        public DSampleTable(string name, IDParser parser)
+            : base(name, parser)
         {
         }
-
+        
         protected override DEntry CreateEntry(IDParsedObject dParsedObject)
         {
             return new DSampleEntry(dParsedObject);

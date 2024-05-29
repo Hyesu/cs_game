@@ -8,21 +8,18 @@ namespace DesignTable.Core
     public class DTable
     {
         private readonly string _name;
-        private readonly string _dirName;
         private readonly IDParser _parser;
 
         private readonly Dictionary<int, DEntry> _entries;
         private readonly Dictionary<string, DEntry> _entriesByStrId;
 
         public string Name => _name;
-        public string DirName => _dirName;
         public IDParser Parser => _parser;
         public IEnumerable<DEntry> All => _entries.Values;
 
-        public DTable(string name, string dirName, IDParser parser)
+        public DTable(string name, IDParser parser)
         {
             _name = name;
-            _dirName = dirName;
             _parser = parser;
 
             _entries = new();
@@ -68,12 +65,12 @@ namespace DesignTable.Core
         {
             if (_entries.ContainsKey(entry.Id))
             {
-                throw new InvalidDataException($"duplicate ency-entry id- section({_name}) id({entry.Id})");
+                throw new InvalidDataException($"duplicate ency-entry id- table({_name}) id({entry.Id})");
             }
 
             if (_entriesByStrId.ContainsKey(entry.StrId))
             {
-                throw new InvalidDataException($"duplicate ency-entry strId- section({_name}) strId({entry.StrId})");
+                throw new InvalidDataException($"duplicate ency-entry strId- table({_name}) strId({entry.StrId})");
             }
 
             _entries.Add(entry.Id, entry);

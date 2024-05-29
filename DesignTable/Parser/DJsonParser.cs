@@ -8,7 +8,7 @@ namespace DesignTable.Parser;
 
 public class DJsonParser : IDParser
 {
-    public async Task<IEnumerable<IDParsedObject>> ParseAsync(string tablePath, string dirName)
+    public async Task<IEnumerable<IDParsedObject>> ParseAsync(string tablePath, string tableName)
     {
         var filePaths = Directory.EnumerateFiles(tablePath, "*.json");
         var parsedObjs = new List<IDParsedObject>();
