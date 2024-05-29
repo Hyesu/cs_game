@@ -1,20 +1,75 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Xml.Linq;
 using DesignTable.Core;
 
 namespace DesignTable.Parser;
 
-public class DXmlParsedObject // : IDParsedObject
+public class DXmlParsedObject : IDParsedObject
 {
-    // int GetId();
-    // string GetStrId();
-    //
-    // string GetString(string fieldName);
-    //
-    // int GetInt(string fieldName);
-    // long GetLong(string fieldName);
-    // float GetFloat(string fieldName);
-    // double GetDouble(string fieldName);
-    //
-    // IEnumerable<string> GetStrArray(string fieldName);
-    // IEnumerable<int> GetIntArray(string fieldName);
-    // IEnumerable<IDParsedObject> GetObjArray(string fieldName);
+    private readonly XElement _element;
+    private readonly int _id;
+    private readonly string _strId;
+    
+    public DXmlParsedObject(XElement element, int id, string strId)
+    {
+        _element = element;
+        _id = id;
+        _strId = strId;
+    }
+    
+    public int GetId()
+    {
+        return _id;
+    }
+
+    public string GetStrId()
+    {
+        return _strId;
+    }
+
+    public string GetString(string fieldName)
+    {
+        return _element.Attribute(fieldName)?.ToString() ?? string.Empty;
+    }
+
+    public int GetInt(string fieldName)
+    {
+        return int.Parse(GetString(fieldName));
+    }
+
+    public long GetLong(string fieldName)
+    {
+        return long.Parse(GetString(fieldName));
+    }
+
+    public float GetFloat(string fieldName)
+    {
+        return float.Parse(GetString(fieldName));
+    }
+
+    public double GetDouble(string fieldName)
+    {
+        return double.Parse(GetString(fieldName));
+    }
+
+    public IEnumerable<string> GetStrArray(string fieldName)
+    {
+        return GetString(fieldName)
+            .Split(";");
+    }
+
+    public IEnumerable<int> GetIntArray(string fieldName)
+    {
+        return GetStrArray(fieldName)
+            .Select(int.Parse);
+    }
+
+    public IEnumerable<IDParsedObject> GetObjArray(string fieldName)
+    {
+        throw new NotSupportedException($"not supported object array in xml parser");
+        return ImmutableArray<IDParsedObject>.Empty;
+    }
 }
