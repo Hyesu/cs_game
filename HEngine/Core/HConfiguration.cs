@@ -1,8 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Newtonsoft.Json.Linq;
 using HEngine.Extensions;
-using HEngine.Utility;
 
 namespace HEngine.Core
 {
@@ -12,15 +10,8 @@ namespace HEngine.Core
 
         public string DesignTableRoot { get; private set; } = string.Empty;
     
-        public void Init()
+        public void Init(string filePath)
         {
-            var fileName = "setting.sample.json";
-            var filePath = HPath.FindFilePathByRecursively(AppDomain.CurrentDomain.BaseDirectory, fileName);
-            if (string.IsNullOrEmpty(filePath))
-            {
-                throw new FileNotFoundException($"cannot find file - fileName({fileName})");
-            }
-            
             using (var sr = new StreamReader(filePath))
             {
                 string json = sr.ReadToEnd();
