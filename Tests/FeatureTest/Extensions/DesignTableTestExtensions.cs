@@ -11,9 +11,9 @@ public static class DesignTableExtensions
         var dlgTable = ctx.Get<DDialogTable>();
         var dlgs = dlgTable.All
             .Select(x => x as DDialog)
-            .Where(x => !x.Speeches.Any(y => !string.IsNullOrEmpty(y.JumpKey)))
             .ToList();
 
+        Assert.That(dlgs.Count, Is.GreaterThan(0), $"not found any dialog data");
         return dlgs.ElementAt(Random.Shared.Next(dlgs.Count));
     }
 }

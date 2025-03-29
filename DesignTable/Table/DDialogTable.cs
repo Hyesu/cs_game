@@ -1,10 +1,14 @@
-﻿using DesignTable.Core;
+﻿using System.Collections.Generic;
+using System.Linq;
+using DesignTable.Core;
 using DesignTable.Entry;
 
 namespace DesignTable.Table
 {
     public class DDialogTable : DTable
     {
+        public IEnumerable<DDialog> As => All.OfType<DDialog>();
+        
         public DDialogTable(string name, IDParser parser)
             : base(name, parser)
         {

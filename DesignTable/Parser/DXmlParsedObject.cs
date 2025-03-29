@@ -70,6 +70,5 @@ public class DXmlParsedObject : IDParsedObject
     public IEnumerable<IDParsedObject> GetObjArray(string fieldName)
     {
         throw new NotSupportedException($"not supported object array in xml parser");
-        return ImmutableArray<IDParsedObject>.Empty;
     }
 }

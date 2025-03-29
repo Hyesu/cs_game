@@ -1,0 +1,41 @@
+{
+  "Id": 1,
+  "StrId": "dlg_sample",
+  "Type": "Conversation",
+  "Speeches": [
+    {
+      "Key" : "optional key for jump",
+      "Character" : "key of character",
+      "Pivot" : "pivot for placing character in screen",
+      "Emotion" : "emotion",
+      "Text" : "text for speech",
+      
+      "JumpKey" : "key to jump",
+      "Choices" : [
+        {
+          "Text" : "first speech - choice A",
+          "Key" : "key to jump when chosen A"
+        },
+        {
+          "Text" : "first speech - choice B",
+          "Key" : "key to jump when chosen"
+        }
+      ]
+    },
+    {
+      "Key" : "key to jump when chosen A",
+      "Character" : "character_2",
+      "Text" : "second speech"
+    },
+    {
+      "Key" : "key to jump",
+      "Character" : "character_2",
+      "Text" : "third speech"
+    },
+    {
+      "Key" : "key to jump when chosen B",
+      "Character" : "character_2",
+      "Text" : "fourth speech"
+    }
+  ]
+}

@@ -7,8 +7,9 @@ public class HConfigurationTests
     [Test]
     public void TestInit()
     {
-        var configuration = HConfiguration.Instance;
-        Assert.That(configuration, Is.Not.Null);
-        Assert.That(string.IsNullOrEmpty(configuration.DesignTableRoot), Is.False);
+        Assert.That(HConfiguration.Shared, Is.Not.Null);
+        
+        HConfiguration.Shared.Init();
+        Assert.That(string.IsNullOrEmpty(HConfiguration.Shared.DesignTableRoot), Is.False);
     }
 }

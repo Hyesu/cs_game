@@ -1,3 +1,4 @@
+using DesignTable.Table;
 using Feature.Dialog;
 using FeatureTest.Extensions;
 
@@ -70,7 +71,12 @@ public class DialogTests : FeatureTestBase
     [Test]
     public void TestNext()
     {
-        var dDlg = D.RandomDialog();
+        var dlgs = D.Get<DDialogTable>().As
+            .Where(x => x.Speeches.All(y => string.IsNullOrEmpty(y.JumpKey)))
+            .ToList();
+        Assert.That(dlgs.Count, Is.GreaterThan(0), $"일직선 방향의 다이얼로그 데이터 없음");
+        
+        var dDlg = dlgs.ElementAtOrDefault(Random.Shared.Next(0, dlgs.Count));
         var handler = new DlgHandlerSpy();
         var participants = dDlg.Speeches
             .DistinctBy(x => x.Character)
@@ -134,10 +140,11 @@ public class DialogTests : FeatureTestBase
     [Test]
     public void TestJump()
     {
-        var dDlg = D.RandomDialog();
-        var context = DialogBuilder.Of(dDlg)
-            .Build();
-
+        var dDlg = D.Get<DDialogTable>().As
+            .FirstOrDefault(x => 3 <= x.Speeches.Count);
+        Assert.That(dDlg, Is.Not.Null, $"대사가 3개 이상인 다이얼로그 데이터 없음");
+        
+        var context = DialogBuilder.Of(dDlg).Build();
         context.Start();
 
         var idx = Random.Shared.Next(2, dDlg.Speeches.Count);

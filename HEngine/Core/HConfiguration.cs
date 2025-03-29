@@ -8,44 +8,26 @@ namespace HEngine.Core
 {
     public class HConfiguration
     {
-        private static HConfiguration _instance;
+        public static HConfiguration Shared = new();
 
-        public string DesignTableRoot { get; private set; }
+        public string DesignTableRoot { get; private set; } = string.Empty;
     
-        public static HConfiguration Instance
+        public void Init()
         {
-            get
+            var fileName = "setting.sample.json";
+            var filePath = HPath.FindFilePathByRecursively(AppDomain.CurrentDomain.BaseDirectory, fileName);
+            if (string.IsNullOrEmpty(filePath))
             {
-                if (null == _instance)
-                {
-                    var filePath = HPath.FindFilePathByRecursively(AppDomain.CurrentDomain.BaseDirectory, "settings.json");
-                    if (string.IsNullOrEmpty(filePath))
-                    {
-                        throw new FileNotFoundException($"cannot find setting.json");
-                    }
-            
-                    using (var sr = new StreamReader(filePath))
-                    {
-                        string json = sr.ReadToEnd();
-                        var jsonObj = JObject.Parse(json);
-
-                        var configuration = new HConfiguration
-                        {
-                            DesignTableRoot = jsonObj.GetString("DesignTableRoot"),
-                        };
-
-                        _instance = configuration;
-                    }
-                }
-
-                return _instance;
+                throw new FileNotFoundException($"cannot find file - fileName({fileName})");
             }
-        }
+            
+            using (var sr = new StreamReader(filePath))
+            {
+                string json = sr.ReadToEnd();
+                var jsonObj = JObject.Parse(json);
 
-        public static void Init()
-        {
-            // ready
-            _ = Instance;
+                DesignTableRoot = jsonObj.GetString("DesignTableRoot");
+            }
         }
     }   
 }

@@ -1,0 +1,23 @@
+{
+  "Id": 2,
+  "StrId": "dlg_linear",
+  "Type": "Conversation",
+  "Speeches": [
+    {
+      "Character" : "A",
+      "Text" : "text 1"
+    },    
+    {
+      "Character" : "B",
+      "Text" : "text 2"
+    },    
+    {
+      "Character" : "C",
+      "Text" : "text 3"
+    },    
+    {
+      "Character" : "A",
+      "Text" : "text 4"
+    }
+  ]
+}
