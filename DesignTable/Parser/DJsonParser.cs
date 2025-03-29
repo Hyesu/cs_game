@@ -4,25 +4,26 @@ using System.Threading.Tasks;
 using DesignTable.Core;
 using Newtonsoft.Json.Linq;
 
-namespace DesignTable.Parser;
-
-public class DJsonParser : IDParser
+namespace DesignTable.Parser
 {
-    public async Task<IEnumerable<IDParsedObject>> ParseAsync(string tablePath, string tableName)
+    public class DJsonParser : IDParser
     {
-        var filePaths = Directory.EnumerateFiles(tablePath, "*.json");
-        var parsedObjs = new List<IDParsedObject>();
-        foreach (var filePath in filePaths)
+        public async Task<IEnumerable<IDParsedObject>> ParseAsync(string tablePath, string tableName)
         {
-            using var sr = new StreamReader(filePath);
-            string str = await sr.ReadToEndAsync();
+            var filePaths = Directory.EnumerateFiles(tablePath, "*.json");
+            var parsedObjs = new List<IDParsedObject>();
+            foreach (var filePath in filePaths)
+            {
+                using var sr = new StreamReader(filePath);
+                string str = await sr.ReadToEndAsync();
 
-            var json = JObject.Parse(str);
-            var parsedObj = new DJsonParsedObject(json);
-            parsedObj.Initialize();
-            parsedObjs.Add(parsedObj);
+                var json = JObject.Parse(str);
+                var parsedObj = new DJsonParsedObject(json);
+                parsedObj.Initialize();
+                parsedObjs.Add(parsedObj);
+            }
+
+            return parsedObjs;
         }
-
-        return parsedObjs;
-    }
+    }   
 }

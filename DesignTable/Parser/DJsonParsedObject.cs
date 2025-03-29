@@ -4,94 +4,95 @@ using System.Text.Json.Nodes;
 using Newtonsoft.Json.Linq;
 using DesignTable.Core;
 
-namespace DesignTable.Parser;
-
-public class DJsonParsedObject : IDParsedObject
+namespace DesignTable.Parser
 {
-    private readonly JObject _json;
-    
-    private int _id;
-    private string _strId;
-
-    public DJsonParsedObject(JObject json)
+    public class DJsonParsedObject : IDParsedObject
     {
-        _json = json;
-        _id = 0;
-        _strId = string.Empty;
-    }
-    
-    public void Initialize()
-    {   
-        _id = GetInt("Id");
-        _strId = GetString("StrId");
-    }
+        private readonly JObject _json;
 
-    public int GetId()
-    {
-        return _id;
-    }
+        private int _id;
+        private string _strId;
 
-    public string GetStrId()
-    {
-        return _strId;
-    }
-    
-    public string GetString(string fieldName)
-    {   
-        if (!_json.TryGetValue(fieldName, out var value))
+        public DJsonParsedObject(JObject json)
         {
-            return null;
+            _json = json;
+            _id = 0;
+            _strId = string.Empty;
         }
 
-        return value.ToString();
-    }
-
-    public int GetInt(string fieldName)
-    {
-        return int.Parse(GetString(fieldName));
-    }
-
-    public long GetLong(string fieldName)
-    {
-        return long.Parse(GetString(fieldName));
-    }
-
-    public float GetFloat(string fieldName)
-    {
-        return float.Parse(GetString(fieldName));
-    }
-
-    public double GetDouble(string fieldName)
-    {
-        return double.Parse(GetString(fieldName));
-    }
-
-    public IEnumerable<string> GetStrArray(string fieldName)
-    {
-        if (!_json.TryGetValue(fieldName, out var value))
+        public void Initialize()
         {
-            return Enumerable.Empty<string>();
+            _id = GetInt("Id");
+            _strId = GetString("StrId");
         }
 
-        return value.ToArray()
-            .Select(x => x.ToString());
-    }
-
-    public IEnumerable<int> GetIntArray(string fieldName)
-    {
-        return GetStrArray(fieldName)
-            .Select(int.Parse);
-    }
-
-    public IEnumerable<IDParsedObject> GetObjArray(string fieldName)
-    {   
-        if (!_json.TryGetValue(fieldName, out var value))
+        public int GetId()
         {
-            return Enumerable.Empty<IDParsedObject>();
+            return _id;
         }
 
-        return value.ToArray()
-            .Select(x => x.ToObject<JObject>())
-            .Select(x => new DJsonParsedObject(x));
+        public string GetStrId()
+        {
+            return _strId;
+        }
+
+        public string GetString(string fieldName)
+        {
+            if (!_json.TryGetValue(fieldName, out var value))
+            {
+                return null;
+            }
+
+            return value.ToString();
+        }
+
+        public int GetInt(string fieldName)
+        {
+            return int.Parse(GetString(fieldName));
+        }
+
+        public long GetLong(string fieldName)
+        {
+            return long.Parse(GetString(fieldName));
+        }
+
+        public float GetFloat(string fieldName)
+        {
+            return float.Parse(GetString(fieldName));
+        }
+
+        public double GetDouble(string fieldName)
+        {
+            return double.Parse(GetString(fieldName));
+        }
+
+        public IEnumerable<string> GetStrArray(string fieldName)
+        {
+            if (!_json.TryGetValue(fieldName, out var value))
+            {
+                return Enumerable.Empty<string>();
+            }
+
+            return value.ToArray()
+                .Select(x => x.ToString());
+        }
+
+        public IEnumerable<int> GetIntArray(string fieldName)
+        {
+            return GetStrArray(fieldName)
+                .Select(int.Parse);
+        }
+
+        public IEnumerable<IDParsedObject> GetObjArray(string fieldName)
+        {
+            if (!_json.TryGetValue(fieldName, out var value))
+            {
+                return Enumerable.Empty<IDParsedObject>();
+            }
+
+            return value.ToArray()
+                .Select(x => x.ToObject<JObject>())
+                .Select(x => new DJsonParsedObject(x));
+        }
     }
 }
