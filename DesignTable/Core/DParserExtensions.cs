@@ -1,12 +1,13 @@
 using System;
 
-namespace DesignTable.Core;
-
-public static class DParserExtensions
+namespace DesignTable.Core
 {
-    public static T GetEnum<T>(this IDParsedObject parsed, string fieldName) where T : Enum
+    public static class DParserExtensions
     {
-        return (T)Enum.Parse(typeof(T), parsed.GetString(fieldName));
-    }
+        public static T GetEnum<T>(this IDParsedObject parsed, string fieldName) where T : Enum
+        {
+            return (T)Enum.Parse(typeof(T), parsed.GetString(fieldName));
+        }
     
+    }   
 }

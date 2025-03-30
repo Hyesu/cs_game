@@ -17,5 +17,5 @@ namespace DesignTable.Core
         IEnumerable<string> GetStrArray(string fieldName);
         IEnumerable<int> GetIntArray(string fieldName);
         IEnumerable<IDParsedObject> GetObjArray(string fieldName);
-    }   
+    }
 }

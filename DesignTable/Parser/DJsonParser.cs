@@ -17,13 +17,34 @@ namespace DesignTable.Parser
                 using var sr = new StreamReader(filePath);
                 string str = await sr.ReadToEndAsync();
 
-                var json = JObject.Parse(str);
-                var parsedObj = new DJsonParsedObject(json);
-                parsedObj.Initialize();
-                parsedObjs.Add(parsedObj);
+                parsedObjs.Add(ParseInternal(str));
             }
 
             return parsedObjs;
         }
-    }   
-}
+        
+        public IEnumerable<IDParsedObject> Parse(string tablePath, string tableName)
+        {
+            var filePaths = Directory.EnumerateFiles(tablePath, "*.json");
+            var parsedObjs = new List<IDParsedObject>();
+            foreach (var filePath in filePaths)
+            {
+                using var sr = new StreamReader(filePath);
+                string str = sr.ReadToEnd();
+
+                parsedObjs.Add(ParseInternal(str));
+            }
+
+            return parsedObjs;
+        }
+
+        private DJsonParsedObject ParseInternal(string str)
+        {
+            var json = JObject.Parse(str);
+            var parsedObj = new DJsonParsedObject(json);
+            parsedObj.Initialize();
+
+            return parsedObj;
+        }
+    }
+}    

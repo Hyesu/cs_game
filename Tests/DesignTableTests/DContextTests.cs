@@ -17,7 +17,7 @@ public class DContextTests
         var tokens = filePath.Split("/");
         var dtRoot = $"{string.Join("/", tokens.Take(tokens.Length - 1))}/TestTableRoot/";
         _ctx = new DContext(dtRoot);
-        _ctx.Initialize();
+        _ctx.Initialize(true);
     }
     
     ///////////////////////

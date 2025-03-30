@@ -17,6 +17,6 @@ public class FeatureTestBase
         var tokens = filePath.Split("/");
         var dtRoot = $"{string.Join("/", tokens.Take(tokens.Length - 1))}/TestTableRoot/";
         D = new DContext(dtRoot);
-        D.Initialize();
+        D.Initialize(true);
     }
 }

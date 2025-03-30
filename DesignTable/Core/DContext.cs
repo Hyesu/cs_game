@@ -10,7 +10,7 @@ namespace DesignTable.Core
     public class DContext
     {
         private readonly string _rootPath;
-        protected readonly Dictionary<Type, DTable> _tables;
+        private readonly Dictionary<Type, DTable> _tables;
 
         public IEnumerable<DTable> Tables => _tables.Values;
 
@@ -32,28 +32,45 @@ namespace DesignTable.Core
             Dialog = Add(new DDialogTable("Dialog", jsonParser));
         }
 
-        public void Initialize()
+        public void Initialize(bool useAsync)
         {
-            var sectionTasks = _tables.Values
-                .Select(LoadTableAsync);
+            if (useAsync)
+            {
+                var sectionTasks = _tables.Values
+                    .Select(LoadTableAsync)
+                    .ToArray();
 
-            Task.WaitAll(sectionTasks.ToArray());
-
+                Task.WaitAll(sectionTasks);
+            }
+            else
+            {
+                foreach (var table in _tables.Values)
+                {
+                    LoadTable(table);
+                }
+            }
+            
             foreach (var table in _tables.Values)
             {
                 table.PostInitialize(_tables);
             }
         }
 
-        private async Task<string> LoadTableAsync(DTable table)
+        private async Task LoadTableAsync(DTable table)
         {
             var tablePath = _rootPath + table.Name;
             var parsedObjs = await table.Parser.ParseAsync(tablePath, table.Name);
             table.Initialize(parsedObjs);
-            return table.Name;
         }
 
-        protected T Add<T>(T table) where T : DTable
+        private void LoadTable(DTable table)
+        {
+            var tablePath = _rootPath + table.Name;
+            var parsedObjs = table.Parser.Parse(tablePath, table.Name);
+            table.Initialize(parsedObjs);
+        }
+
+        private T Add<T>(T table) where T : DTable
         {
             _tables.Add(typeof(T), table);
             return table;
