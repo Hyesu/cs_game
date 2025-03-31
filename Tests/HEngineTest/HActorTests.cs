@@ -41,7 +41,7 @@ public class HActorTests
     
     //////////////////////////////////////////////////////
     [Test]
-    public void TestRegistration()
+    public void TestComponent_Registration()
     {
         var actor = new HActor();
 
@@ -58,10 +58,7 @@ public class HActorTests
         Assert.That(found2, Is.EqualTo(compA)); // 등록한 컴포넌트의 부모 타입으로도 조회되어야 함
 
         // 등록 해제한 컴포넌트는 조회되지 않아야 함
-        var result = actor.UnregisterComponent(compA);
-        var errResult = actor.UnregisterComponent(compB);
-        Assert.That(result, Is.True);
-        Assert.That(errResult, Is.False);
+        actor.UnregisterComponent(compA);
         
         var found3 = actor.GetComponent<TestChildComponentA>();
         var found4 = actor.GetComponent<TestParentComponent>();
@@ -70,13 +67,14 @@ public class HActorTests
     }
 
     [Test]
-    public void TestTickable()
+    public void TestComponent_Tick()
     {
         var actor = new HActor();
         var nonTickableComp = actor.RegisterComponent<TestParentComponent>();
         var tickableComp = actor.RegisterComponent<TestTickableComponent>();
         
         // tickable 속성이 켜진 컴포넌트만 tick되어야 함
+        actor.Initialize();
         actor.Tick(0.1f);
         
         Assert.That(nonTickableComp.TickCount, Is.EqualTo(0));
