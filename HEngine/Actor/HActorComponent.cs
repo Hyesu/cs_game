@@ -29,5 +29,10 @@
         public virtual void EndPlay()
         {
         }
+
+        public HActor GetOwner()
+        {
+            return _owner;
+        }
     }
 }
