@@ -37,6 +37,12 @@ namespace HEngine.Actor
 
         public T RegisterComponent<T>() where T : HActorComponent, new()
         {
+            var component = new T();
+            return RegisterComponent(component);
+        }
+
+        public T RegisterComponent<T>(T component) where T : HActorComponent
+        {
             var types = new List<Type>();
             GetComponentTypeRecursively(typeof(T), types);
 
@@ -49,7 +55,6 @@ namespace HEngine.Actor
                 }
             }
 
-            var component = new T();
             foreach (var type in types)
             {
                 _components.TryAdd(type, component);
