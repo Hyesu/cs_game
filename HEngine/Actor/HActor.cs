@@ -80,7 +80,7 @@ namespace HEngine.Actor
             
             foreach (var component in _components.Values)
             {
-                component.Initialize();
+                component.Initialize(this);
             }
 
             _hasInitialized = true;

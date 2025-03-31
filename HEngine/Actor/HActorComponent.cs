@@ -4,6 +4,8 @@
     {
         public HActorComponentPreference Pref;
 
+        private HActor _owner;
+
         public HActorComponent()
         {
             Pref = new();
@@ -11,8 +13,9 @@
             // if component need to tick, code "Pref.Tickable = true"
         }
         
-        public virtual void Initialize()
+        public virtual void Initialize(HActor owner)
         {
+            _owner = owner;
         }
 
         public virtual void BeginPlay()
