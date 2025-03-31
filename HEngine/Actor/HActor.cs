@@ -15,9 +15,14 @@ namespace HEngine.Actor
             _tickables = ImmutableArray<HActorComponent>.Empty;
         }
 
-        public bool RegisterComponent(HActorComponent component)
+        public T GetComponent<T>() where T : HActorComponent
         {
-            return false;
+            return _components.GetValueOrDefault(typeof(T)) as T;
+        }
+
+        public T RegisterComponent<T>() where T : HActorComponent, new()
+        {
+            return new T();
         }
 
         public bool UnregisterComponent(HActorComponent component)
@@ -27,6 +32,10 @@ namespace HEngine.Actor
 
         public void Initialize()
         {
+            foreach (var component in _components.Values)
+            {
+                component.Initialize();
+            }
         }
 
         public void BeginPlay()

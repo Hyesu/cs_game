@@ -2,7 +2,7 @@
 {
     public class HActorComponent
     {
-        public readonly HActorComponentPreference Pref;
+        public HActorComponentPreference Pref;
 
         public HActorComponent()
         {
