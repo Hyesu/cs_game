@@ -1,4 +1,4 @@
-﻿namespace HEngine.Actor
+﻿namespace HEngine
 {
     public class HActorComponent
     {

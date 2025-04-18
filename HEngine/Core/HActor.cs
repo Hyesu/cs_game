@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace HEngine.Actor
+namespace HEngine
 {
     public class HActor
     {
-        private Dictionary<Type, HActorComponent> _components; // TODO: thread-safe
+        private Dictionary<Type, HActorComponent> _components;
         private ImmutableArray<HActorComponent> _tickables;
         
         private bool _hasInitialized;
