@@ -39,7 +39,7 @@ namespace DesignTable.Parser
      {   
          if (!_json.TryGetValue(fieldName, out var value))
          {
-             return null;
+             return string.Empty;
          }
  
          return value.ToString();
