@@ -1,5 +1,5 @@
 using DesignTable.Table;
-using Feature.Dialog;
+using HFin.Dialog;
 using FeatureTest.Extensions;
 
 namespace FeatureTest;

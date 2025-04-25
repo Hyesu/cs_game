@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DesignTable.Entry;
 
-namespace Feature.Dialog
+namespace HFin.Dialog
 {
     public class DialogBuilder
     {
