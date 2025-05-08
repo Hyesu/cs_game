@@ -1,0 +1,4 @@
+<ResourcePaths>
+    <ResourcePath Id="1" StrId="ui_bridge" Type="UI" SubType="Bridge" Prefab="Prefabs/UI/UI_Bridge"/>
+    <ResourcePath Id="2" StrId="ui_dialog" Type="UI" SubType="Dialog" Prefab="Prefabs/UI/UI_Dialog"/>
+</ResourcePaths>
