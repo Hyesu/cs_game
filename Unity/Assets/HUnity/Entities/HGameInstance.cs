@@ -4,7 +4,7 @@ using DesignTable.Core;
 
 namespace HUnity.Entities
 {
-    public abstract class HGameInstance : MonoBehaviour
+    public class HGameInstance : MonoBehaviour
     {
         protected static HGameInstance Impl;
         public static HGameInstance GetInstance() => Impl;
@@ -27,8 +27,14 @@ namespace HUnity.Entities
             }
         }
 
-        protected abstract HSystemProvider MakeSystemProvider();
-        protected abstract void RegisterPresenter(HPresenterFactory factory);
+        protected virtual HSystemProvider MakeSystemProvider()
+        {
+            return new HSystemProvider();
+        }
+
+        protected virtual void RegisterPresenter(HPresenterFactory factory)
+        {
+        }
 
         protected virtual void OnInitialize()
         {
@@ -41,8 +47,8 @@ namespace HUnity.Entities
         protected virtual void OnUpdate(float dt)
         {
         }
-        
-        private void Initialize()
+
+        public void Initialize()
         {
             // configure
             var settingPath = Application.dataPath + "/HData/setting.json";
@@ -52,12 +58,12 @@ namespace HUnity.Entities
             var dataTableRootPath = Application.dataPath + HConfiguration.Shared.DesignTableRoot;
             _d = new DContext(dataTableRootPath);
             _sysProvider = MakeSystemProvider();
-            
+
             _d.Initialize(false);
             _sysProvider.Initialize();
-            
+
             RegisterPresenter(HPresenterFactory.Shared);
-            
+
             OnInitialize();
 
             // begin play
