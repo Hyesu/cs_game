@@ -1,6 +1,7 @@
 using UnityEngine;
 using HEngine.Core;
 using DesignTable.Core;
+using UnityEngine.SceneManagement;
 
 namespace HUnity.Entities
 {
@@ -13,19 +14,6 @@ namespace HUnity.Entities
         private HSystemProvider _sysProvider;
 
         public DContext DContext => _d;
-
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void MakeInstance()
-        {
-            if (Impl == null)
-            {
-                var gameObj = new GameObject(nameof(HGameInstance));
-                Impl = gameObj.AddComponent<HGameInstance>();
-                Impl.Initialize();
-
-                DontDestroyOnLoad(gameObj);
-            }
-        }
 
         protected virtual HSystemProvider MakeSystemProvider()
         {
@@ -43,7 +31,7 @@ namespace HUnity.Entities
         protected virtual void OnStart()
         {
         }
-
+        
         protected virtual void OnUpdate(float dt)
         {
         }
@@ -65,21 +53,40 @@ namespace HUnity.Entities
             RegisterPresenter(HPresenterFactory.Shared);
 
             OnInitialize();
-
-            // begin play
+        }
+        
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
             _sysProvider.BeginPlay();
         }
 
+        private void OnSceneUnloaded(Scene scene)
+        {
+            _sysProvider.EndPlay();            
+        }
+        
         // mono behaviours
         void Start()
         {
             OnStart();
         }
 
+        void OnEnable()
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
+        }
+
         void Update()
         {
             var dt = Time.deltaTime;
             OnUpdate(dt);
+        }
+        
+        void OnDisable()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
     }
 }
