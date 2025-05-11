@@ -5,6 +5,7 @@ namespace HEngine.Core
 {
     public class HSystemProvider
     {
+        private readonly Dictionary<Type, HSystem> _indexes = new();
         private readonly Dictionary<Type, HSystem> _systems = new();
 
         private void GetSystemTypeRecursively(Type? type, List<Type> types)
@@ -20,7 +21,7 @@ namespace HEngine.Core
 
         public T GetSystem<T>() where T : HSystem
         {
-            return _systems.GetValueOrDefault(typeof(T)) as T;
+            return _indexes.GetValueOrDefault(typeof(T)) as T;
         }
 
         public T AddSystem<T>() where T : HSystem, new()
@@ -32,11 +33,12 @@ namespace HEngine.Core
         public T AddSystem<T>(T system) where T : HSystem
         {
             var types = new List<Type>();
-            GetSystemTypeRecursively(typeof(T), types);
+            var originType = typeof(T);
+            GetSystemTypeRecursively(originType, types);
 
             foreach (var type in types)
             {
-                if (_systems.ContainsKey(type))
+                if (_indexes.ContainsKey(type))
                 {
                     return null;
                 }
@@ -44,9 +46,10 @@ namespace HEngine.Core
 
             foreach (var type in types)
             {
-                _systems.TryAdd(type, system);
+                _indexes.TryAdd(type, system);
             }
             
+            _systems.TryAdd(originType, system);
             return system;
         }
 

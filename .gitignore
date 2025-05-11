@@ -8,3 +8,6 @@ settings.json
 **/.idea/*
 **/*.user
 **/*.DS_Store
+
+# unity meta ignores
+**/*.meta
