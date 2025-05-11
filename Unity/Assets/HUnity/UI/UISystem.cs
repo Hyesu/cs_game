@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using HEngine.Core;
 using HUnity.Core;
@@ -41,6 +42,15 @@ namespace HUnity.UI
             
             removed.Close();
             return true;
+        }
+
+        public void CloseAll()
+        {
+            var types = _presenters.Keys.ToArray();
+            foreach (var type in types)
+            {
+                Close(type);
+            }
         }
     }
 }
