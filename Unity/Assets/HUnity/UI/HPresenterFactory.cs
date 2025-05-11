@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DesignTable.Types;
 
-namespace HUnity.Entities
+namespace HUnity.UI
 {
     public class HPresenterFactory
     {

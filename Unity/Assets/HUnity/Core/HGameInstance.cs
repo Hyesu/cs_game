@@ -1,9 +1,10 @@
 using UnityEngine;
-using HEngine.Core;
-using DesignTable.Core;
 using UnityEngine.SceneManagement;
+using HEngine.Core;
+using HUnity.UI;
+using DesignTable.Core;
 
-namespace HUnity.Entities
+namespace HUnity.Core
 {
     public class HGameInstance : MonoBehaviour
     {

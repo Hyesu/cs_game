@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using HEngine.Core;
-using HUnity.Entities;
+using HUnity.Core;
 using DesignTable.Types;
 
-namespace HUnity.Systems
+namespace HUnity.UI
 {
     public class UISystem : HSystem
     {

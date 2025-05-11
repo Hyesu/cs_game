@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HUnity.Entities
+namespace HUnity.Core
 {
     public class HInputController
     {

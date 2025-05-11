@@ -1,6 +1,6 @@
 using System;
 
-namespace HUnity.Entities
+namespace HUnity.Core
 {
     [Flags]
     public enum HInputCommand
