@@ -1,5 +1,6 @@
-﻿namespace HEngine.Event;
-
-public interface IHEvent
+﻿namespace HEngine.Event
 {
+    public interface IHEvent
+    {
+    }   
 }

@@ -1,6 +1,7 @@
-﻿namespace HEngine.Event;
-
-public interface IHEventListener
+﻿namespace HEngine.Event
 {
-    void Listen(IHEvent evt);
+    public interface IHEventListener
+    {
+        void Listen(IHEvent evt);
+    }   
 }
