@@ -15,6 +15,7 @@ namespace HUnity.Core
         private HSystemProvider _sysProvider;
 
         public DContext DContext => _d;
+        public HSystemProvider SystemProvider => _sysProvider;
 
         protected virtual HSystemProvider MakeSystemProvider()
         {
@@ -51,9 +52,19 @@ namespace HUnity.Core
             _d.Initialize(false);
             _sysProvider.Initialize();
 
+            foreach (var sys in _sysProvider.As)
+            {
+                sys.SetDataContext(_d);
+            }
+
             RegisterPresenter(HPresenterFactory.Shared);
 
             OnInitialize();
+        }
+
+        public T GetSystem<T>() where T : HSystem
+        {
+            return _sysProvider.GetSystem<T>();
         }
         
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

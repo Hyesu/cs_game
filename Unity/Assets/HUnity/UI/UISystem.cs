@@ -17,6 +17,11 @@ namespace HUnity.UI
             _canvasRoot = canvasRoot;
         }
 
+        public bool IsOpened(PresenterType presenterType)
+        {
+            return _presenters.ContainsKey(presenterType);
+        }
+
         public HPresenter Open(PresenterType presenterType)
         {
             if (_presenters.TryGetValue(presenterType, out var presenter))

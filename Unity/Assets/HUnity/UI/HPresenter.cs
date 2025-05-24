@@ -1,6 +1,9 @@
-﻿using Unity.Properties;
-using UnityEngine;
+﻿using UnityEngine;
+using DesignTable.Core;
 using DesignTable.Types;
+using HEngine.Core;
+using HUnity.Core;
+using HUnity.Extensions;
 
 namespace HUnity.UI
 {
@@ -9,22 +12,27 @@ namespace HUnity.UI
         public PresenterType Type { get; protected set; }
         
         protected GameObject ViewObj;
+        protected DContext D;
+        
         private GameObject _viewPrefab;
+        private HSystemProvider _sysProvider;
 
         public static T Create<T>(string prefabPath) where T : HPresenter, new()
         {
-            // TODO: Addressable 및 리소스 매니저 적용
-            GameObject prefab = Resources.Load<GameObject>(prefabPath);
-            if (null == prefab)
-                throw new InvalidPathException($"not found ui prefab - path({prefabPath})");
+            var gameInstance = HGameInstance.GetInstance();
+            var provider = gameInstance.SystemProvider;
+            var resourceSys = provider.GetSystem<HResourceSystem>();
+            var prefab = resourceSys.LoadPrefab(prefabPath);
          
             var presenter = new T();
+            presenter.D = gameInstance.DContext;
             presenter._viewPrefab = prefab;
+            presenter._sysProvider = provider;
 
             return presenter;
         }
 
-        public HPresenter()
+        protected HPresenter()
         {
         }
 
@@ -32,19 +40,36 @@ namespace HUnity.UI
         {
         }
 
+        protected virtual void OnConstructed()
+        {
+        }
+
+        protected virtual void OnDestructed()
+        {
+        }
+
         public void Open(Transform parentTransform)
         {
             ViewObj = Object.Instantiate(_viewPrefab, parentTransform);
             BindView();
+            
+            OnConstructed();
         }
 
         public void Close()
         {
             if (ViewObj != null)
             {
-                Object.Destroy(ViewObj);
+                OnDestructed();
+                
+                ViewObj.SafeDestroy();
                 ViewObj = null;
             }
+        }
+
+        protected T GetSystem<T>() where T : HSystem
+        {
+            return _sysProvider?.GetSystem<T>();
         }
     }
 }
