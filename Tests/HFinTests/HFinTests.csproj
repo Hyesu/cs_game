@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\HEngine\HEngine.csproj" />
     <ProjectReference Include="..\..\HFin\HFin.csproj" />
   </ItemGroup>
 
