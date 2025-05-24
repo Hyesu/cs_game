@@ -8,6 +8,8 @@ namespace HEngine.Core
         private readonly Dictionary<Type, HSystem> _indexes = new();
         private readonly Dictionary<Type, HSystem> _systems = new();
 
+        public IEnumerable<HSystem> As => _systems.Values;
+
         private void GetSystemTypeRecursively(Type? type, List<Type> types)
         {
             if (null == type || typeof(HSystem) == type)
@@ -43,6 +45,8 @@ namespace HEngine.Core
                     return null;
                 }
             }
+            
+            system.SetProvider(this);
 
             foreach (var type in types)
             {

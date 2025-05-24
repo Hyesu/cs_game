@@ -11,6 +11,11 @@ namespace HEngine.Extensions
         {
             return int.Parse(json.GetString(key));
         }
+        
+        public static float GetFloat(this JObject json, string key)
+        {
+            return float.Parse(json.GetString(key));
+        }
 
         public static string GetString(this JObject json, string key)
         {
