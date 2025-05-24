@@ -4,13 +4,8 @@ namespace HEngineTest;
 
 public class HEventBusTests
 {
-    class TestEventA : IHEvent
-    {
-    }
-
-    class TestEventB : IHEvent
-    {
-    }
+    class TestEventA : IHEvent { }
+    class TestEventB : IHEvent { }
     
     class TestEventListener
     {

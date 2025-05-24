@@ -2,4 +2,5 @@
 
 public interface IHEventListener
 {
+    void Listen(IHEvent evt);
 }
