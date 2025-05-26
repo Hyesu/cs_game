@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Feature.Fsm
+namespace HFin.Fsm
 {
     public class HFsmMachine
     {

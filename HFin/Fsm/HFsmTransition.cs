@@ -1,4 +1,4 @@
-﻿namespace Feature.Fsm
+﻿namespace HFin.Fsm
 {
     public enum HFsmTransition
     {

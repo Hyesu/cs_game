@@ -1,48 +1,49 @@
-﻿namespace Feature.Fsm;
-
-public class HFsmState
+﻿namespace HFin.Fsm
 {
-    private HFsmTransition _transition;
+    public class HFsmState
+    {
+        private HFsmTransition _transition;
     
-    // fsm machine에서만 호출
-    public void Enter()
-    {
-        _transition = HFsmTransition.None;
-        OnEnter();
-    }
+        // fsm machine에서만 호출
+        public void Enter()
+        {
+            _transition = HFsmTransition.None;
+            OnEnter();
+        }
 
-    public void Update(float dt)
-    {
-        OnUpdate(dt);
-    }
+        public void Update(float dt)
+        {
+            OnUpdate(dt);
+        }
 
-    public void Exit()
-    {
-        OnExit();
-    }
+        public void Exit()
+        {
+            OnExit();
+        }
 
-    public bool TryGetTransition(out HFsmTransition transition)
-    {
-        transition = _transition;
-        return transition != HFsmTransition.None;
-    }
+        public bool TryGetTransition(out HFsmTransition transition)
+        {
+            transition = _transition;
+            return transition != HFsmTransition.None;
+        }
 
-    // 하위에서 override하여 기능 확장
-    protected virtual void OnEnter()
-    {
-    }
+        // 하위에서 override하여 기능 확장
+        protected virtual void OnEnter()
+        {
+        }
 
-    protected virtual void OnUpdate(float dt)
-    {
-    }
+        protected virtual void OnUpdate(float dt)
+        {
+        }
 
-    protected virtual void OnExit()
-    {
-    }
+        protected virtual void OnExit()
+        {
+        }
     
-    // 트랜지션을 명령하고 시픈 경우 state 하위 타입에서 호출
-    protected void SetTransition(HFsmTransition transition)
-    {
-        _transition = transition;
-    }
+        // 트랜지션을 명령하고 시픈 경우 state 하위 타입에서 호출
+        protected void SetTransition(HFsmTransition transition)
+        {
+            _transition = transition;
+        }
+    }   
 }
