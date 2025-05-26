@@ -26,13 +26,15 @@ namespace HFin.Fsm
             }
         }
 
-        public void AddTransition(HFsmState prevState, HFsmTransition transition, HFsmState nextState)
+        public void AddTransition<TPrevState, TNextState>(HFsmTransition transition)
+            where TPrevState : HFsmState
+            where TNextState : HFsmState
         {
             if (HFsmTransition.None == transition)
                 throw new InvalidOperationException($"cannot make transition with None transition");
             
-            var prevHash = prevState.GetType().GetHashCode();
-            var nextHash = nextState.GetType().GetHashCode();
+            var prevHash = typeof(TPrevState).GetHashCode();
+            var nextHash = typeof(TNextState).GetHashCode();
 
             _transitions[prevHash].Add(transition, nextHash);
         }

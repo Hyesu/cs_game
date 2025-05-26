@@ -1,4 +1,4 @@
-﻿using Feature.Fsm;
+﻿using HFin.Fsm;
 
 namespace FeatureTest;
 
@@ -102,14 +102,14 @@ public class HFsmTests : FeatureTestBase
         
         var machine = new HFsmMachine();
         machine.AddState(testState, true);
-        machine.AddTransition(testState, HFsmTransition.Success, successState);
-        machine.AddTransition(testState, HFsmTransition.Fail, failState);
+        machine.AddTransition<TestState, SuccessState>(HFsmTransition.Success);
+        machine.AddTransition<TestState, FailState>(HFsmTransition.Fail);
         
         machine.AddState(failState);
-        machine.AddTransition(failState, HFsmTransition.Success, testState);
+        machine.AddTransition<FailState, TestState>(HFsmTransition.Success);
         
         machine.AddState(successState);
-        machine.AddTransition(successState, HFsmTransition.Success, testState);
+        machine.AddTransition<SuccessState, TestState>(HFsmTransition.Success);
 
         machine.Start();
         
