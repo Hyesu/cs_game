@@ -55,6 +55,12 @@ public class HFsmTests : FeatureTestBase
             EnteredCount++;
         }
 
+        protected override void OnUpdate(float dt)
+        {
+            base.OnUpdate(dt);
+            SetTransition(HFsmTransition.Success);
+        }
+
         protected override void OnExit()
         {
             ExitedCount++;
@@ -71,6 +77,12 @@ public class HFsmTests : FeatureTestBase
             EnteredCount++;
         }
 
+        protected override void OnUpdate(float dt)
+        {
+            base.OnUpdate(dt);
+            SetTransition(HFsmTransition.Success);
+        }
+        
         protected override void OnExit()
         {
             ExitedCount++;
@@ -91,13 +103,13 @@ public class HFsmTests : FeatureTestBase
         var machine = new HFsmMachine();
         machine.AddState(testState, true);
         machine.AddTransition(testState, HFsmTransition.Success, successState);
-        machine.AddTransition(testState, HFsmTransition.Fail, successState);
+        machine.AddTransition(testState, HFsmTransition.Fail, failState);
         
         machine.AddState(failState);
-        machine.AddTransition(failState, HFsmTransition.None, testState);
+        machine.AddTransition(failState, HFsmTransition.Success, testState);
         
         machine.AddState(successState);
-        machine.AddTransition(successState, HFsmTransition.None, testState);
+        machine.AddTransition(successState, HFsmTransition.Success, testState);
 
         machine.Start();
         
@@ -105,7 +117,8 @@ public class HFsmTests : FeatureTestBase
         var tryCnt = RandomInt(10, 30);
         for (int i = 0; i < tryCnt; i++)
         {
-            machine.Update(0.1f);
+            machine.Update(0.1f); // test state update
+            machine.Update(0.1f); // success / fail state update
         }
         
         // assert - 트랜지션에 따라 상태가 전환되었는지 확인

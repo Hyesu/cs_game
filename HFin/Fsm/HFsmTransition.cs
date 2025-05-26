@@ -1,8 +1,9 @@
-﻿namespace Feature.Fsm;
-
-public enum HFsmTransition
+﻿namespace Feature.Fsm
 {
-    None,
-    Fail,
-    Success,
+    public enum HFsmTransition
+    {
+        None,
+        Fail,
+        Success,
+    }   
 }
