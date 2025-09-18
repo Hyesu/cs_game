@@ -7,6 +7,7 @@ namespace HUnity.Core
     public class HInputController
     {
         private readonly Dictionary<KeyCode, HInputCommand> _keyCommands = new();
+        private readonly Dictionary<KeyCode, HInputCommand> _keyUpCommands = new();
         private HInputCommand _command;
         
         private HDragAndDropEventListener _dragAndDropListener;
@@ -18,6 +19,8 @@ namespace HUnity.Core
             _keyCommands.Add(KeyCode.A, HInputCommand.Left);
             _keyCommands.Add(KeyCode.S, HInputCommand.Down);
             _keyCommands.Add(KeyCode.D, HInputCommand.Right);
+            
+            _keyUpCommands.Add(KeyCode.R, HInputCommand.Rotation);
         }
 
         public void Update(float dt)
@@ -43,7 +46,16 @@ namespace HUnity.Core
                     _command |= cmd;
                 }
             }
-
+            
+            // key up inputs
+            foreach (var (keyCode, cmd) in _keyUpCommands)
+            {
+                if (Input.GetKeyUp(keyCode))
+                {
+                    _command |= cmd;
+                }
+            }
+            
             // mouse inputs
             if (!EventSystem.current.IsPointerOverGameObject())
             {

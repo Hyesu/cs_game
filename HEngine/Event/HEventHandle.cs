@@ -23,6 +23,7 @@ namespace HEngine.Event
                 return;
         
             _bus.Unsubscribe(this);
+            _isDisposed = true;
         }
     }   
 }

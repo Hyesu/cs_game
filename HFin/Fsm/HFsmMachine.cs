@@ -10,6 +10,8 @@ namespace HFin.Fsm
         
         private HFsmState _curState;
         private HFsmTransitionMap _curTransitionMap;
+
+        public string CurrentStateName => _curState.GetType().ToString();
     
         public void AddState(HFsmState state, bool isInitialState = false)
         {
@@ -44,25 +46,34 @@ namespace HFin.Fsm
             if (null == _curState)
                 throw new InvalidOperationException($"not found initial state for fsm machine");
             
-            _curState.Enter();
+            _curState.Enter(null);
         }
 
         public void Update(float dt)
         {
             _curState.Update(dt);
 
-            if (_curState.TryGetTransition(out var transition)
-                && _curTransitionMap.TryGetNextStateHash(transition, out var nextStateHash))
+            if (_curState.TryGetTransition(out var transition))
             {
-                var nextState = _states.GetValueOrDefault(nextStateHash);
-                var nextTransitionMap = _transitions.GetValueOrDefault(nextStateHash);
-                
-                _curState.Exit();
-
-                _curState = nextState!;
-                _curTransitionMap = nextTransitionMap!;
-                _curState.Enter();
+                Transfer(transition, null);
             }
+        }
+
+        public void Transfer(HFsmTransition transition, IHFsmTransitionArg arg)
+        {
+            if (!_curTransitionMap.TryGetNextStateHash(transition, out var nextStateHash))
+            {
+                return;
+            }
+            
+            var nextState = _states.GetValueOrDefault(nextStateHash);
+            var nextTransitionMap = _transitions.GetValueOrDefault(nextStateHash);
+            
+            _curState.Exit();
+
+            _curState = nextState!;
+            _curTransitionMap = nextTransitionMap!;
+            _curState.Enter(arg);
         }
     }   
 }

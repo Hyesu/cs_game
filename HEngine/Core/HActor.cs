@@ -2,32 +2,36 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using DesignTable.Core;
+using HUnity.Core;
 
-namespace HEngine
+namespace HEngine.Core
 {
     public class HActor
     {
+        public readonly long Id;
+        
         private Dictionary<Type, HActorComponent> _components;
         private ImmutableArray<HActorComponent> _tickables;
-        
         private bool _hasInitialized;
         private bool _hasBegun;
 
-        public HActor()
+        public HActor(long id)
         {
+            Id = id;
+            
             _components = new();
             _tickables = ImmutableArray<HActorComponent>.Empty;
         }
 
-        private void GetComponentTypeRecursively(Type? type, List<Type> types)
+        public DContext GetDContext()
         {
-            if (null == type || typeof(HActorComponent) == type)
-            {
-                return;
-            }
-            
-            types.Add(type);
-            GetComponentTypeRecursively(type.BaseType, types);
+            return HGameInstance.GetInstance()?.DContext;
+        }
+
+        public T GetSystem<T>() where T : HSystem
+        {
+            return HGameInstance.GetInstance()?.SystemProvider?.GetSystem<T>();
         }
 
         public T GetComponent<T>() where T : HActorComponent
@@ -77,7 +81,7 @@ namespace HEngine
             }
         }
 
-        public void Initialize()
+        public virtual void Initialize()
         {
             _tickables = _components.Values
                 .Where(x => x.Pref.Tickable)
@@ -91,7 +95,7 @@ namespace HEngine
             _hasInitialized = true;
         }
 
-        public void BeginPlay()
+        public virtual void BeginPlay()
         {
             // TODO: 디버그 assert 같은거 추가할 수 있는지 확인하고, hasInitialized가 true여야 한다는 단정 추가 가능하면 하기
             
@@ -103,7 +107,7 @@ namespace HEngine
             _hasBegun = true;
         }
 
-        public void Tick(float dt)
+        public virtual void Tick(float dt)
         {
             // TODO: 디버그 assert 같은거 추가할 수 있는지 확인하고, hasInitialized가 true여야 한다는 단정 추가 가능하면 하기
             
@@ -113,7 +117,7 @@ namespace HEngine
             }
         }
         
-        public void EndPlay()
+        public virtual void EndPlay()
         {
             if (!_hasBegun)
             {
@@ -125,6 +129,17 @@ namespace HEngine
             {
                 component.EndPlay();
             }
+        }
+        
+        private void GetComponentTypeRecursively(Type? type, List<Type> types)
+        {
+            if (null == type || typeof(HActorComponent) == type)
+            {
+                return;
+            }
+            
+            types.Add(type);
+            GetComponentTypeRecursively(type.BaseType, types);
         }
     }
 }

@@ -38,6 +38,16 @@ namespace HUnity.Core
         {
         }
 
+        protected virtual void OnSceneLoaded()
+        {
+            _sysProvider.BeginPlay();
+        }
+
+        protected virtual void OnSceneUnloaded()
+        {
+            _sysProvider.EndPlay();
+        }
+
         public void Initialize()
         {
             // configure
@@ -50,17 +60,19 @@ namespace HUnity.Core
             _sysProvider = MakeSystemProvider();
 
             _d.Initialize(false);
-            _sysProvider.Initialize();
-
             foreach (var sys in _sysProvider.As)
             {
                 sys.SetDataContext(_d);
             }
+            
+            _sysProvider.Initialize();
 
             RegisterPresenter(HPresenterFactory.Shared);
 
             OnInitialize();
         }
+        
+        
 
         public T GetSystem<T>() where T : HSystem
         {
@@ -69,12 +81,12 @@ namespace HUnity.Core
         
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            _sysProvider.BeginPlay();
+            OnSceneLoaded();
         }
 
         private void OnSceneUnloaded(Scene scene)
         {
-            _sysProvider.EndPlay();            
+            OnSceneUnloaded();
         }
         
         // mono behaviours
@@ -99,6 +111,8 @@ namespace HUnity.Core
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
+            
+            _sysProvider.Shutdown();
         }
     }
 }

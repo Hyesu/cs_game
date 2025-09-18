@@ -65,6 +65,14 @@ namespace HEngine.Core
             }
         }
 
+        public void Shutdown()
+        {
+            foreach (var system in _systems.Values)
+            {
+                system.Shutdown();
+            }
+        }
+
         public void BeginPlay()
         {
             foreach (var system in _systems.Values)

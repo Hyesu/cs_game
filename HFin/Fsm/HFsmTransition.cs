@@ -5,5 +5,6 @@
         None,
         Fail,
         Success,
+        Next,
     }   
 }

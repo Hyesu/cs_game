@@ -11,6 +11,10 @@ namespace HEngine.Core
         {
         }
 
+        public virtual void Shutdown()
+        {
+        }
+
         public virtual void BeginPlay()
         {
         }

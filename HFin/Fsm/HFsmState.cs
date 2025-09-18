@@ -5,10 +5,10 @@
         private HFsmTransition _transition;
     
         // fsm machine에서만 호출
-        public void Enter()
+        public void Enter(IHFsmTransitionArg arg)
         {
             _transition = HFsmTransition.None;
-            OnEnter();
+            OnEnter(arg);
         }
 
         public void Update(float dt)
@@ -28,7 +28,7 @@
         }
 
         // 하위에서 override하여 기능 확장
-        protected virtual void OnEnter()
+        protected virtual void OnEnter(IHFsmTransitionArg arg)
         {
         }
 
