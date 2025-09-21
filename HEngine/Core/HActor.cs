@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using DesignTable.Core;
-using HUnity.Core;
 
 namespace HEngine.Core
 {
@@ -26,12 +25,12 @@ namespace HEngine.Core
 
         public DContext GetDContext()
         {
-            return HGameInstance.GetInstance()?.DContext;
+            throw new NotImplementedException();
         }
 
         public T GetSystem<T>() where T : HSystem
         {
-            return HGameInstance.GetInstance()?.SystemProvider?.GetSystem<T>();
+            throw new NotImplementedException();
         }
 
         public T GetComponent<T>() where T : HActorComponent

@@ -9,7 +9,6 @@ namespace HEngine.Core
         public static HConfiguration Shared = new();
 
         public string DesignTableRoot { get; private set; } = string.Empty;
-        public float CameraDefaultSpeed { get; private set; } = 50;
     
         public void Init(string filePath)
         {
@@ -19,7 +18,6 @@ namespace HEngine.Core
                 var jsonObj = JObject.Parse(json);
 
                 DesignTableRoot = jsonObj.GetString("DesignTableRoot");
-                CameraDefaultSpeed = jsonObj.GetFloat("CameraDefaultSpeed");
             }
         }
     }   

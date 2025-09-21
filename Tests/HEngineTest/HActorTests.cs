@@ -1,9 +1,11 @@
-using HEngine;
+using HEngine.Core;
 
 namespace HEngineTest;
 
 public class HActorTests
 {
+    private long _dummyId;
+    
     private class TestParentComponent : HActorComponent
     {
         public int TickCount = 0;
@@ -43,7 +45,7 @@ public class HActorTests
     [Test]
     public void TestComponent_Registration()
     {
-        var actor = new HActor();
+        var actor = new HActor(_dummyId);
 
         // 같은 부모를 상속한 서로 다른 child 컴포넌트는 등록할 수 없음
         var compA = actor.RegisterComponent<TestChildComponentA>();
@@ -69,7 +71,7 @@ public class HActorTests
     [Test]
     public void TestComponent_Tick()
     {
-        var actor = new HActor();
+        var actor = new HActor(_dummyId);
         var nonTickableComp = actor.RegisterComponent<TestParentComponent>();
         var tickableComp = actor.RegisterComponent<TestTickableComponent>();
         

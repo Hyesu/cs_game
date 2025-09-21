@@ -23,7 +23,7 @@ public class HFsmTests : FeatureTestBase
         public int SuccessCount { get; set; }
         public int FailCount { get; set; }
 
-        protected override void OnEnter()
+        protected override void OnEnter(IHFsmTransitionArg arg)
         {
             Triggered++;
         }
@@ -50,7 +50,7 @@ public class HFsmTests : FeatureTestBase
         public int EnteredCount { get; set; }
         public int ExitedCount { get; set; }
 
-        protected override void OnEnter()
+        protected override void OnEnter(IHFsmTransitionArg arg)
         {
             EnteredCount++;
         }
@@ -72,7 +72,7 @@ public class HFsmTests : FeatureTestBase
         public int EnteredCount { get; set; }
         public int ExitedCount { get; set; }
 
-        protected override void OnEnter()
+        protected override void OnEnter(IHFsmTransitionArg arg)
         {
             EnteredCount++;
         }
