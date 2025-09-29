@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DesignTable\DesignTable.csproj" />
+    <ProjectReference Include="..\HEngine\HEngine.csproj" />
   </ItemGroup>
 
 </Project>

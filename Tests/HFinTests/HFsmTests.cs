@@ -2,7 +2,7 @@
 
 namespace FeatureTest;
 
-public class HFsmTests : FeatureTestBase
+public class HFsmTests : FinTestFixture
 {
     private static int RandomInt(int min = 0, int max = 0)
     {

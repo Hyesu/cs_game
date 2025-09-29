@@ -3,13 +3,13 @@ using HEngine.Utility;
 
 namespace FeatureTest;
 
-public class FeatureTestBase
+public class FinTestFixture
 {
     protected readonly DContext D;
 
-    protected FeatureTestBase()
+    protected FinTestFixture()
     {
-        var filePath = HPath.FindFilePathByRecursively(AppDomain.CurrentDomain.BaseDirectory, $"{nameof(FeatureTestBase)}.cs");
+        var filePath = HPath.FindFilePathByRecursively(AppDomain.CurrentDomain.BaseDirectory, $"{nameof(FinTestFixture)}.cs");
         Assert.That(filePath, Is.Not.Null, "not found app setting - DesignDataRoot");
 
         filePath = filePath.Replace("\\", "/");

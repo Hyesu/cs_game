@@ -4,7 +4,7 @@ using FeatureTest.Extensions;
 
 namespace FeatureTest;
 
-public class DialogTests : FeatureTestBase
+public class DialogTests : FinTestFixture
 {
     private class DlgHandlerSpy : IDialogHandler
     {
