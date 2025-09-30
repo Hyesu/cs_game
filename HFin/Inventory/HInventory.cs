@@ -1,46 +1,73 @@
-﻿using Feature.IdGenerator;
+﻿using System.Collections.Generic;
 
-namespace Feature.Inventory;
-
-public class HInventory<T> where T : class, IHCollectible
+namespace Feature.Inventory
 {
-    private readonly IHIdGenerator _idGenerator;
+    public class HInventory<T> where T : class, IHCollectible
+    {
+        private readonly Dictionary<int, T> _inventory = new();
 
-    public HInventory(IHIdGenerator idGenerator)
-    {
-        _idGenerator = idGenerator;
-    }
-    
-    public T? Find(long uid)
-    {
-        return null;
-    }
+        public T? Find(int dataId)
+        {
+            return _inventory.GetValueOrDefault(dataId);
+        }
 
-    public T? FindByDataId(int dataId)
-    {
-        return null;
-    }
+        public bool Has(int dataId)
+        {
+            return _inventory.ContainsKey(dataId);
+        }
 
-    public bool Has(int dataId)
-    {
-        return false;
-    }
-    
-    // TODO: 스택 개념에 의한 슬롯 분할만들 때 OUT 다듬기
-    public bool Put(T item, out T putItem)
-    {
-        putItem = null;
-        return false;
-    }
+        public bool Put(T item, out T putItem)
+        {
+            putItem = null;
 
-    public bool Remove(long uid, int amount)
-    {
-        return false;
-    }
+            if (null == item || 0 >= item.DataId || 0 >= item.Amount)
+            {
+                return false;
+            }
 
-    public bool Take(long uid, int amount, out T taken)
-    {
-        taken = null;
-        return false;
+            if (!_inventory.TryGetValue(item.DataId, out var inventoryItem))
+            {
+                if (!_inventory.TryAdd(item.DataId, item))
+                {
+                    return false;
+                }
+
+                putItem = item;
+                return true;
+            }
+
+            if (!inventoryItem.Add(item.Amount))
+            {
+                return false;
+            }
+
+            putItem = item;
+            return true;
+        }
+
+        public bool Remove(int dataId, int amount)
+        {
+            if (0 >= dataId || 0 >= amount)
+            {
+                return false;
+            }
+
+            if (!_inventory.TryGetValue(dataId, out var item))
+            {
+                return false;
+            }
+
+            if (!item.Sub(amount))
+            {
+                return false;
+            }
+
+            if (0 >= item.Amount)
+            {
+                return _inventory.Remove(dataId);
+            }
+
+            return true;
+        }
     }
 }
