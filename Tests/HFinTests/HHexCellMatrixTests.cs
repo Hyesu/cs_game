@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using HEngine.Extensions;
 using HFin.Cell;
 
 namespace FeatureTest;
@@ -26,8 +27,8 @@ public class HHexCellMatrixTests
     }
     
     ////////////////////////////////////////
-    [Test]
-    public void Test()
+    [Test(Description = "초기화와 인접 셀 빌드")]
+    public void TestAdjacentCells()
     {
         var matrix = new HHexCellMatrix<TestCell>(1f);
         var cellCenter = new TestCell(new(0f, 0f, 0f));
@@ -116,5 +117,57 @@ public class HHexCellMatrixTests
         // 클리어
         matrix.Clear();
         Assert.That(matrix.CellCount, Is.Zero);
+    }
+
+    [Test(Description = "길찾기")]
+    public void TestFindPath()
+    {
+        // 중심 기준으로 6방향 연결된 셀들
+        List<TestCell> connectedCells = [
+            new(new(0f, 0f, 0f)),
+            new(new(1.732f, 0, 0)),
+            new(new(0.866f, 1.5f, 0)),
+            new(new(-0.866f, 1.5f, 0)),
+            new(new(-1.732f, 0, 0)),
+            new(new(-0.866f, -1.5f, 0)),
+            new(new(0.866f, -1.5f, 0))
+        ];
+        var unconnectedCell = new TestCell(new(50f, 50f, 0));
+        var matrix = new HHexCellMatrix<TestCell>(1f);   
+        matrix.Add(connectedCells);
+        matrix.Add([unconnectedCell]);
+
+        var srcCell = connectedCells.RandomElement();
+        var connectedCell = connectedCells
+            .Where(x => srcCell != x)
+            .ToList()
+            .RandomElement();
+        
+        // 연결되지 않은 셀에는 path를 찾을 수 없음
+        var errResult = matrix.TryFindPath(srcCell.GetCenter2D(), unconnectedCell.GetCenter2D(), out _);
+        Assert.That(errResult, Is.False);
+        
+        // 연결된 셀끼리는 path를 찾을 수 있음
+        var result = matrix.TryFindPath(srcCell.GetCenter2D(), connectedCell.GetCenter2D(), out var path);
+        Assert.That(result, Is.True);
+        Assert.That(path, Is.Not.Null);
+        
+        // 첫번째 세그먼트는 출발지점, 마지막 세그먼트는 도착 지점
+        Assert.That(path.Count, Is.GreaterThanOrEqualTo(2));
+        
+        var firstSegment = path.First();
+        var lastSegment = path.Last();
+        Assert.That(firstSegment, Is.EqualTo(srcCell.GetCenter2D()));
+        Assert.That(lastSegment, Is.EqualTo(connectedCell.GetCenter2D()));
+        
+        // 각 세그먼트는 인접해있으므로, 거리가 지름 이내이다.
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+            var prevSegment = path[i];
+            var nextSegment = path[i + 1];
+            var distance = Vector2.Distance(prevSegment, nextSegment);
+            
+            Assert.That(distance, Is.LessThanOrEqualTo(2 * matrix.Radius));
+        }
     }
 }

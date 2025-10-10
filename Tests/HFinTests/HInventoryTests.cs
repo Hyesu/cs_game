@@ -3,7 +3,7 @@ using Feature.Inventory;
 
 namespace FeatureTest;
 
-public class InventoryTests : FinTestFixture
+public class HInventoryTests : FinTestFixture
 {
     private readonly IHIdGenerator _idGenerator = new HIncrementalGenerator();
     private readonly int _dummyDataId = 1;

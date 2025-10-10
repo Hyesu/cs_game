@@ -1,23 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Numerics;
 
 namespace HFin.Cell
 {   
     public class HHexCellMatrix<T> where T : class, IHCell
     {
-        private readonly float _radius;
-        private readonly Dictionary<HCellIndex, T> _cells;
+        public readonly float Radius;
         
-        private Dictionary<T, ImmutableArray<T>> _adjacents;
+        private readonly Dictionary<HCellIndex, T> _cells;
+        private Dictionary<T, ImmutableArray<T>> _adjacentCells;
 
         public int CellCount => _cells.Count;
 
         public HHexCellMatrix(float radius)
         {
-            _radius = radius;
+            Radius = radius;
+            
             _cells = new();
-            _adjacents = new();
+            _adjacentCells = new();
+        }
+
+        public ImmutableArray<T> GetAllAdjacent(T cell)
+        {
+            return _adjacentCells.GetValueOrDefault(cell, ImmutableArray<T>.Empty);
+        }
+        
+        public void Add(IList<T> cells)
+        {
+            foreach (var cell in cells)
+            {
+                var v = cell.GetCenter2D();
+                var index = v.ToHexIndexByFlatTop(Radius);
+                if (!_cells.TryAdd(index, cell))
+                    throw new InvalidOperationException($"duplicate hex index - vertex({v}) index({index})");
+            }
+            
+            RebuildAdjacent();
+        }
+
+        public void Clear()
+        {
+            _cells.Clear();
+            RebuildAdjacent();
+        }
+
+        public bool TryFindPath(Vector2 src, Vector2 dst, out List<Vector2> path)
+        {
+            path = null;
+            return false;
         }
 
         private void RebuildAdjacent()
@@ -36,31 +68,7 @@ namespace HFin.Cell
                 temp.Add(cell, adjacentCells.ToImmutableArray());
             }
             
-            _adjacents = temp;
-        }
-
-        public void Add(IList<T> cells)
-        {
-            foreach (var cell in cells)
-            {
-                var v = cell.GetCenter2D();
-                var index = v.ToHexIndexByFlatTop(_radius);
-                if (!_cells.TryAdd(index, cell))
-                    throw new InvalidOperationException($"duplicate hex index - vertex({v}) index({index})");
-            }
-            
-            RebuildAdjacent();
-        }
-
-        public void Clear()
-        {
-            _cells.Clear();
-            RebuildAdjacent();
-        }
-
-        public ImmutableArray<T> GetAllAdjacent(T cell)
-        {
-            return _adjacents.GetValueOrDefault(cell, ImmutableArray<T>.Empty);
+            _adjacentCells = temp;
         }
     }   
 }
