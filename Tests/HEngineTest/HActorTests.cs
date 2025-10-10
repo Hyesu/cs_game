@@ -4,7 +4,7 @@ namespace HEngineTest;
 
 public class HActorTests
 {
-    private long _dummyId;
+    private long _dummyId = 1;
     
     private class TestParentComponent : HActorComponent
     {

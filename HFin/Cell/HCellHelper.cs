@@ -5,14 +5,14 @@ namespace HFin.Cell
 {
     public static class HCellHelper
     {
-        public static readonly HCellIndex[] HexDirections = [
+        public static readonly HCellIndex[] HexDirections = new HCellIndex[] {
             new(+1,  0), // E
             new(+1, -1), // NE
             new( 0, -1), // NW
             new(-1,  0), // W
             new(-1, +1), // SW
             new( 0, +1)  // SE
-        ];
+        };
 
         public static HCellIndex Add(this HCellIndex lhs, HCellIndex rhs)
         {
