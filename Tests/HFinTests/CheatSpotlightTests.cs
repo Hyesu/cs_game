@@ -31,7 +31,7 @@ public class CheatSpotlightTests
         var action = new CheatAction("ExpectedCommand");
         var executedCount = 0;
         
-        spotlight.Add(action, (ImmutableArray<string> args) =>
+        spotlight.Add(action, args =>
         {
             if (1 > args.Length)
             {
