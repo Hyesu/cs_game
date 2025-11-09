@@ -81,6 +81,14 @@ namespace HEngine.Core
             }
         }
 
+        public void PostBeginPlay()
+        {
+            foreach (var system in _systems.Values)
+            {
+                system.PostBeginPlay();
+            }
+        }
+
         public void EndPlay()
         {
             foreach (var system in _systems.Values)

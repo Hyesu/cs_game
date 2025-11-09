@@ -8,6 +8,7 @@ namespace HEngine.Core
 {
     public class HActor
     {
+        private readonly IHWorld _world;
         public readonly long Id;
         
         private Dictionary<Type, HActorComponent> _components;
@@ -15,8 +16,9 @@ namespace HEngine.Core
         private bool _hasInitialized;
         private bool _hasBegun;
 
-        public HActor(long id)
+        public HActor(IHWorld world, long id)
         {
+            _world = world;
             Id = id;
             
             _components = new();
@@ -25,12 +27,12 @@ namespace HEngine.Core
 
         public DContext GetDContext()
         {
-            throw new NotImplementedException();
+            return _world.GetDContext();
         }
 
         public T GetSystem<T>() where T : HSystem
         {
-            throw new NotImplementedException();
+            return _world.GetSystem<T>();
         }
 
         public T GetComponent<T>() where T : HActorComponent
@@ -82,6 +84,9 @@ namespace HEngine.Core
 
         public virtual void Initialize()
         {
+            if (_hasInitialized)
+                throw new InvalidOperationException($"actor initialized duplicately - actorId({Id})");
+            
             _tickables = _components.Values
                 .Where(x => x.Pref.Tickable)
                 .ToImmutableArray();

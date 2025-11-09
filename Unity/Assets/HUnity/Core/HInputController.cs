@@ -1,31 +1,46 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 namespace HUnity.Core
 {
     public class HInputController
     {
-        private readonly Dictionary<KeyCode, HInputCommand> _keyCommands = new();
-        private readonly Dictionary<KeyCode, HInputCommand> _keyUpCommands = new();
+        private readonly Dictionary<Key, HInputCommand> _keyCommands = new();
+        private readonly Dictionary<Key, HInputCommand> _keyUpCommands = new();
         private HInputCommand _command;
         
         private HDragAndDropEventListener _dragAndDropListener;
+        private bool _active = true;
+        
+        public bool IsActive => _active;
 
         public void Initialize()
         {
             // TODO: 키맵 설정을 통해 할 수 있도록 해야 함
-            _keyCommands.Add(KeyCode.W, HInputCommand.Up);
-            _keyCommands.Add(KeyCode.A, HInputCommand.Left);
-            _keyCommands.Add(KeyCode.S, HInputCommand.Down);
-            _keyCommands.Add(KeyCode.D, HInputCommand.Right);
+            _keyCommands.Add(Key.W, HInputCommand.Up);
+            _keyCommands.Add(Key.A, HInputCommand.Left);
+            _keyCommands.Add(Key.S, HInputCommand.Down);
+            _keyCommands.Add(Key.D, HInputCommand.Right);
             
-            _keyUpCommands.Add(KeyCode.R, HInputCommand.Rotation);
+            _keyUpCommands.Add(Key.R, HInputCommand.Rotation);
         }
 
         public void Update(float dt)
         {
             ProduceCommands();
+        }
+
+        public void Activate(bool active)
+        {
+            if (active == _active)
+            {
+                return;
+            }
+            
+            _active = active;
+            Debug.Log($"input controller activated({!_active} -> {_active})");
         }
 
         public HInputCommand FlushCommands()
@@ -39,18 +54,18 @@ namespace HUnity.Core
         private void ProduceCommands()
         {
             // key inputs
-            foreach (var (keyCode, cmd) in _keyCommands)
+            foreach (var (key, cmd) in _keyCommands)
             {
-                if (Input.GetKey(keyCode))
+                if (Keyboard.current[key].isPressed)
                 {
                     _command |= cmd;
                 }
             }
             
             // key up inputs
-            foreach (var (keyCode, cmd) in _keyUpCommands)
+            foreach (var (key, cmd) in _keyUpCommands)
             {
-                if (Input.GetKeyUp(keyCode))
+                if (Keyboard.current[key].wasReleasedThisFrame)
                 {
                     _command |= cmd;
                 }
@@ -59,26 +74,26 @@ namespace HUnity.Core
             // mouse inputs
             if (!EventSystem.current.IsPointerOverGameObject())
             {
-                if (Input.GetMouseButtonDown(0))
+                if (Mouse.current.leftButton.isPressed)
                 {
                     _command |= HInputCommand.MouseLeftDown;
-                    _dragAndDropListener?.Press(Input.mousePosition);
+                    _dragAndDropListener?.Press(Mouse.current.position.value);
                 }
-                if (Input.GetMouseButton(0))
+                if (Mouse.current.leftButton.wasPressedThisFrame)
                 {
-                    _dragAndDropListener?.Press(Input.mousePosition);
+                    _dragAndDropListener?.Press(Mouse.current.position.value);
                 }
-                if (Input.GetMouseButtonUp(0))
+                if (Mouse.current.leftButton.wasReleasedThisFrame)
                 {
                     _command |= HInputCommand.MouseLeftUp;
-                    _dragAndDropListener?.Release(Input.mousePosition);
+                    _dragAndDropListener?.Release(Mouse.current.position.value);
                 }
 
-                if (Input.GetMouseButtonDown(1))
+                if (Mouse.current.rightButton.isPressed)
                 {
                     _command |= HInputCommand.MouseRightDown;
                 }
-                if (Input.GetMouseButtonUp(1))
+                if (Mouse.current.rightButton.wasReleasedThisFrame)
                 {
                     _command |= HInputCommand.MouseRightUp;
                 }

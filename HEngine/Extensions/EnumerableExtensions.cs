@@ -11,5 +11,13 @@ namespace HEngine.Extensions
                 origin.Add(element);
             }
         }
+
+        public static void AddRange<T>(this Queue<T> origin, IEnumerable<T> input)
+        {
+            foreach (var element in input)
+            {
+                origin.Enqueue(element);
+            }
+        }
     }    
 }

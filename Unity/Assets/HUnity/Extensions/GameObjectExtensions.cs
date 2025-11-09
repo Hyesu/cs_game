@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace HUnity.Extensions
 {
@@ -6,11 +9,22 @@ namespace HUnity.Extensions
     {
         public static void SafeDestroy(this GameObject obj)
         {
-            if (obj != null)
+            if (obj)
             {
                 obj.SetActive(false);
                 Object.Destroy(obj);
             }
+        }
+
+        public static GameObject AddChild(this GameObject obj, GameObject childPrefab)
+        {
+            return Object.Instantiate(childPrefab, obj.transform);
+        }
+        
+        public static void RemoveChild(this GameObject obj, int index)
+        {
+            var child = obj.transform.GetChild(index);
+            child?.gameObject.SafeDestroy();
         }
         
         public static void RemoveChildren(this GameObject obj)
@@ -21,16 +35,18 @@ namespace HUnity.Extensions
             }
         }
 
-        public static void RemoveChild(this GameObject obj, int index)
+        public static IEnumerable<GameObject> Children(this GameObject obj)
         {
-            var child = obj.transform.GetChild(index);
-            child?.gameObject.SafeDestroy();
+            for (int i = 0; i < obj.transform.childCount; i++)
+            {
+                yield return obj.transform.GetChild(i).gameObject;
+            }
         }
 
         public static T GetComponentFromParentRecursively<T>(this GameObject obj)
         {
             var parent = obj.transform.parent;
-            while (parent != null)
+            while (parent)
             {
                 var component = parent.GetComponent<T>();
                 if (null != component)

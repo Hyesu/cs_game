@@ -4,7 +4,7 @@
     {
         public HActorComponentPreference Pref;
 
-        private HActor _owner;
+        private HActor _owner = null!;
 
         public HActorComponent()
         {

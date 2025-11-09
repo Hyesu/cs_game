@@ -13,8 +13,9 @@ namespace HFin.Cell
         
         private readonly Dictionary<HCellIndex, T> _cells;
         private Dictionary<T, ImmutableArray<T>> _adjacentCells;
-
+        
         public int CellCount => _cells.Count;
+        public IEnumerable<T> Cells => _cells.Values;
 
         public HHexCellMatrix(float radius)
         {
@@ -22,6 +23,17 @@ namespace HFin.Cell
             
             _cells = new();
             _adjacentCells = new();
+        }
+
+        public T Get(HCellIndex index)
+        {
+            return _cells.GetValueOrDefault(index);
+        }
+
+        public T GetByPosition(Vector2 pos)
+        {
+            var index = pos.ToHexIndexByFlatTop(Radius);
+            return Get(index);
         }
 
         public ImmutableArray<T> GetAllAdjacent(T cell)

@@ -4,8 +4,8 @@ namespace HEngine.Core
 {
     public class HSystem
     {
-        protected DContext D;
-        protected HSystemProvider Provider;
+        protected DContext D = null!;
+        protected HSystemProvider Provider = null!;
         
         public virtual void Initialize()
         {
@@ -16,6 +16,10 @@ namespace HEngine.Core
         }
 
         public virtual void BeginPlay()
+        {
+        }
+        
+        public virtual void PostBeginPlay()
         {
         }
 
@@ -35,7 +39,7 @@ namespace HEngine.Core
 
         protected T GetSystem<T>() where T : HSystem
         {
-            return Provider?.GetSystem<T>();
+            return Provider.GetSystem<T>();
         }
     }   
 }

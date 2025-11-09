@@ -4,6 +4,7 @@ using DesignTable.Types;
 using HEngine.Core;
 using HUnity.Core;
 using HUnity.Extensions;
+using HUnity.Systems;
 
 namespace HUnity.UI
 {
@@ -23,10 +24,18 @@ namespace HUnity.UI
             var provider = gameInstance.SystemProvider;
             var resourceSys = provider.GetSystem<HResourceSystem>();
             var prefab = resourceSys.LoadPrefab(prefabPath);
+
+            return Create<T>(prefab);
+        }
+
+        public static T Create<T>(GameObject prefabObj) where T : HPresenter, new()
+        {
+            var gameInstance = HGameInstance.GetInstance();
+            var provider = gameInstance.SystemProvider;
          
             var presenter = new T();
             presenter.D = gameInstance.DContext;
-            presenter._viewPrefab = prefab;
+            presenter._viewPrefab = prefabObj;
             presenter._sysProvider = provider;
 
             return presenter;
@@ -48,7 +57,7 @@ namespace HUnity.UI
         {
         }
 
-        public void Open(Transform parentTransform)
+        public void Attach(Transform parentTransform)
         {
             ViewObj = Object.Instantiate(_viewPrefab, parentTransform);
             BindView();
@@ -56,9 +65,9 @@ namespace HUnity.UI
             OnConstructed();
         }
 
-        public void Close()
+        public void Detach()
         {
-            if (ViewObj != null)
+            if (ViewObj)
             {
                 OnDestructed();
                 

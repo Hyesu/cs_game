@@ -4,6 +4,7 @@ using UnityEngine;
 using HEngine.Core;
 using HUnity.Core;
 using DesignTable.Types;
+using Herring.UI.Presenter;
 
 namespace HUnity.UI
 {
@@ -24,15 +25,21 @@ namespace HUnity.UI
 
         public HPresenter Open(PresenterType presenterType)
         {
+            var d = HGameInstance.GetInstance().DContext;
+            var prefab = d.ResourcePath.GetUIPrefab(presenterType);
+
+            return Open(presenterType, prefab);
+        }
+
+        public HPresenter Open(PresenterType presenterType, string prefabPath)
+        {
             if (_presenters.TryGetValue(presenterType, out var presenter))
             {
                 return presenter;
             }
 
-            var d = HGameInstance.GetInstance().DContext;
-            var prefab = d.ResourcePath.GetUIPrefab(presenterType);
-            presenter = HPresenterFactory.Shared.Create(presenterType, prefab);
-            presenter.Open(_canvasRoot.transform);
+            presenter = HPresenterFactory.Shared.Create(presenterType, prefabPath);
+            presenter.Attach(_canvasRoot.transform);
             
             _presenters.Add(presenter.Type, presenter);
             return presenter;
@@ -45,7 +52,7 @@ namespace HUnity.UI
                 return false;
             }
             
-            removed.Close();
+            removed.Detach();
             return true;
         }
 
@@ -56,6 +63,12 @@ namespace HUnity.UI
             {
                 Close(type);
             }
+        }
+
+        public void ShowToastMessage(string text)
+        {
+            var presenter = Open(PresenterType.Toast) as ToastMessagePresenter;
+            presenter!.Show(text);
         }
     }
 }

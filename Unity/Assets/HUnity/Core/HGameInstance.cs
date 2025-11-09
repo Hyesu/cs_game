@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using HEngine.Core;
@@ -13,9 +15,15 @@ namespace HUnity.Core
 
         private DContext _d;
         private HSystemProvider _sysProvider;
+        private ImmutableArray<IHInputInterpretable> _inputInterpreters;
 
         public DContext DContext => _d;
         public HSystemProvider SystemProvider => _sysProvider;
+
+        public virtual HInputController GetController()
+        {
+            return null;
+        }
 
         protected virtual HSystemProvider MakeSystemProvider()
         {
@@ -41,6 +49,7 @@ namespace HUnity.Core
         protected virtual void OnSceneLoaded()
         {
             _sysProvider.BeginPlay();
+            _sysProvider.PostBeginPlay();
         }
 
         protected virtual void OnSceneUnloaded()
@@ -58,6 +67,7 @@ namespace HUnity.Core
             var dataTableRootPath = Application.dataPath + HConfiguration.Shared.DesignTableRoot;
             _d = new DContext(dataTableRootPath);
             _sysProvider = MakeSystemProvider();
+            _inputInterpreters = _sysProvider.As.OfType<IHInputInterpretable>().ToImmutableArray();
 
             _d.Initialize(false);
             foreach (var sys in _sysProvider.As)
@@ -72,8 +82,6 @@ namespace HUnity.Core
             OnInitialize();
         }
         
-        
-
         public T GetSystem<T>() where T : HSystem
         {
             return _sysProvider.GetSystem<T>();
@@ -90,20 +98,33 @@ namespace HUnity.Core
         }
         
         // mono behaviours
-        void Start()
-        {
-            OnStart();
-        }
-
         void OnEnable()
         {
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
 
+        void Start()
+        {
+            OnStart();
+        }
+        
         void Update()
         {
             var dt = Time.deltaTime;
+
+            var controller = GetController();
+            if (controller != null && controller.IsActive)
+            {
+                controller.Update(dt);
+                
+                var command = controller.FlushCommands();
+                foreach (var inputInterpreter in _inputInterpreters)
+                {
+                    inputInterpreter.UpdateCommand(command, dt);
+                }
+            }
+            
             OnUpdate(dt);
         }
         

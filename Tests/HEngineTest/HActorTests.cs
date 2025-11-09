@@ -1,10 +1,25 @@
+using DesignTable.Core;
 using HEngine.Core;
 
 namespace HEngineTest;
 
 public class HActorTests
 {
+    private IHWorld _world = new TestWorld();
     private long _dummyId = 1;
+
+    private class TestWorld : IHWorld
+    {
+        public DContext GetDContext()
+        {
+            throw new NotImplementedException();
+        }
+
+        public T GetSystem<T>() where T : HSystem
+        {
+            throw new NotImplementedException();
+        }
+    }
     
     private class TestParentComponent : HActorComponent
     {
@@ -45,7 +60,7 @@ public class HActorTests
     [Test]
     public void TestComponent_Registration()
     {
-        var actor = new HActor(_dummyId);
+        var actor = new HActor(_world, _dummyId);
 
         // 같은 부모를 상속한 서로 다른 child 컴포넌트는 등록할 수 없음
         var compA = actor.RegisterComponent<TestChildComponentA>();
@@ -71,7 +86,7 @@ public class HActorTests
     [Test]
     public void TestComponent_Tick()
     {
-        var actor = new HActor(_dummyId);
+        var actor = new HActor(_world, _dummyId);
         var nonTickableComp = actor.RegisterComponent<TestParentComponent>();
         var tickableComp = actor.RegisterComponent<TestTickableComponent>();
         

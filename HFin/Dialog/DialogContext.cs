@@ -15,6 +15,7 @@ namespace HFin.Dialog
         private readonly ImmutableArray<IDialogHandler> _handlers;
         private bool _hasStarted;
 
+        public DDialog D => _dDlg;
         public DDialogSpeech ActiveSpeech { get; private set; }
         public int ActiveIdx { get; private set; }
 
