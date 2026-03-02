@@ -11,19 +11,19 @@ namespace DesignTable.Table
         {
         }
         
-        protected override DEntry CreateEntry(IDParsedObject dParsedObject)
+        protected override DEntry CreateEntry(IdParsedObject dParsedObject)
         {
             return new DSampleEntry(dParsedObject);
         }
 
         public DSampleEntry Get(int id)
         {
-            return GetInternal<DSampleEntry>(id);
+            return Get<DSampleEntry>(id);
         }
 
         public DSampleEntry GetByStrId(string strId)
         {
-            return GetByStrIdInternal<DSampleEntry>(strId);
+            return Get<DSampleEntry>(strId);
         }
     }
    

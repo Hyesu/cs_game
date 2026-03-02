@@ -135,7 +135,7 @@ namespace HEngine.Core
             }
         }
         
-        private void GetComponentTypeRecursively(Type? type, List<Type> types)
+        private void GetComponentTypeRecursively(Type type, List<Type> types)
         {
             if (null == type || typeof(HActorComponent) == type)
             {

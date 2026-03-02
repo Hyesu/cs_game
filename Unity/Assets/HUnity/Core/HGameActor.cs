@@ -11,7 +11,8 @@ namespace HUnity.Core
         public readonly HUnityGameObjectComponent GameObject;
         public readonly HUnityMovementComponent Movement;
 
-        public HGameActor(long id, DActor dActor, Transform rootTransform) : base(id)
+        public HGameActor(IHWorld world, long id, DActor dActor, Transform rootTransform)
+            : base(world, id)
         {
             Meta = RegisterComponent<HUnityActorMetaComponent>();
             GameObject = RegisterComponent<HUnityGameObjectComponent>();

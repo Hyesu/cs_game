@@ -1,3 +1,4 @@
+using DesignTable.Entry;
 using DesignTable.Table;
 using HFin.Dialog;
 using FeatureTest.Extensions;
@@ -71,7 +72,7 @@ public class DialogTests : FinTestFixture
     [Test]
     public void TestNext()
     {
-        var dlgs = D.Get<DDialogTable>().As
+        var dlgs = D.Get<DDialogTable>().As<DDialog>()
             .Where(x => x.Speeches.All(y => string.IsNullOrEmpty(y.JumpKey)))
             .ToList();
         Assert.That(dlgs.Count, Is.GreaterThan(0), $"일직선 방향의 다이얼로그 데이터 없음");
@@ -140,7 +141,7 @@ public class DialogTests : FinTestFixture
     [Test]
     public void TestJump()
     {
-        var dDlg = D.Get<DDialogTable>().As
+        var dDlg = D.Get<DDialogTable>().As<DDialog>()
             .FirstOrDefault(x => 3 <= x.Speeches.Count);
         Assert.That(dDlg, Is.Not.Null, $"대사가 3개 이상인 다이얼로그 데이터 없음");
         

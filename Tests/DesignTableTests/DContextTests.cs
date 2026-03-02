@@ -37,7 +37,7 @@ public class DContextTests
         
         foreach (var speech in dlg.Speeches)
         {
-            TestContext.Out.WriteLine($"-- {speech.Character} : {speech.Text} // emotion({speech.Emotion})");
+            TestContext.Out.WriteLine($"-- {speech.Character} : {speech.Text}");
         }
     }
 

@@ -8,7 +8,7 @@ using DesignTable.Core;
 
 namespace HUnity.Core
 {
-    public class HGameInstance : MonoBehaviour
+    public class HGameInstance : MonoBehaviour, IHWorld
     {
         protected static HGameInstance Impl;
         public static HGameInstance GetInstance() => Impl;
@@ -82,11 +82,6 @@ namespace HUnity.Core
             OnInitialize();
         }
         
-        public T GetSystem<T>() where T : HSystem
-        {
-            return _sysProvider.GetSystem<T>();
-        }
-        
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             OnSceneLoaded();
@@ -114,14 +109,15 @@ namespace HUnity.Core
             var dt = Time.deltaTime;
 
             var controller = GetController();
-            if (controller != null && controller.IsActive)
+            if (controller != null)
             {
-                controller.Update(dt);
-                
-                var command = controller.FlushCommands();
-                foreach (var inputInterpreter in _inputInterpreters)
+                if (controller.Update(dt))
                 {
-                    inputInterpreter.UpdateCommand(command, dt);
+                    var command = controller.FlushCommands();
+                    foreach (var inputInterpreter in _inputInterpreters)
+                    {
+                        inputInterpreter.UpdateCommand(command, dt);
+                    }
                 }
             }
             
@@ -134,6 +130,17 @@ namespace HUnity.Core
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
             
             _sysProvider.Shutdown();
+        }
+        
+        // IHWorld
+        public DContext GetDContext()
+        {
+            return _d;
+        }
+        
+        public T GetSystem<T>() where T : HSystem
+        {
+            return _sysProvider.GetSystem<T>();
         }
     }
 }

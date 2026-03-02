@@ -14,19 +14,19 @@ namespace DesignTable.Table
         {
         }
         
-        protected override DEntry CreateEntry(IDParsedObject parsedObject)
+        protected override DEntry CreateEntry(IdParsedObject parsedObject)
         {
             return new DDialog(parsedObject);
         }
 
         public DDialog Get(int id)
         {
-            return GetInternal<DDialog>(id);
+            return Get<DDialog>(id);
         }
 
         public DDialog GetByStrId(string strId)
         {
-            return GetByStrIdInternal<DDialog>(strId);
+            return Get<DDialog>(strId);
         }
     }
    

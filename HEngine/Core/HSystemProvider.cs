@@ -10,7 +10,7 @@ namespace HEngine.Core
 
         public IEnumerable<HSystem> As => _systems.Values;
 
-        private void GetSystemTypeRecursively(Type? type, List<Type> types)
+        private void GetSystemTypeRecursively(Type type, List<Type> types)
         {
             if (null == type || typeof(HSystem) == type)
             {

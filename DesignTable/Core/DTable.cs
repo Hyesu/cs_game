@@ -17,6 +17,11 @@ namespace DesignTable.Core
         public IDParser Parser => _parser;
         public IEnumerable<DEntry> All => _entries.Values;
 
+        public IEnumerable<TEntry> As<TEntry>() where TEntry : DEntry
+        {
+            return All.OfType<TEntry>();
+        }
+
         public DTable(string name, IDParser parser)
         {
             _name = name;
@@ -26,12 +31,12 @@ namespace DesignTable.Core
             _entriesByStrId = new();
         }
 
-        protected virtual DEntry CreateEntry(IDParsedObject parsedObject)
+        protected virtual DEntry CreateEntry(IdParsedObject parsedObject)
         {
             throw new InvalidOperationException($"not implemented ency-section entry creator");
         }
 
-        public virtual void Initialize(IEnumerable<IDParsedObject> parsedObjects)
+        public virtual void Initialize(IEnumerable<IdParsedObject> parsedObjects)
         {
             var entries = parsedObjects
                 .Select(CreateEntry);
@@ -41,11 +46,11 @@ namespace DesignTable.Core
             }
         }
 
-        public virtual void PostInitialize(IReadOnlyDictionary<Type, DTable> allSections)
+        public virtual void PostInitialize(IReadOnlyDictionary<Type, DTable> allTables)
         {
         }
 
-        protected T GetInternal<T>(int id) where T : DEntry
+        public T Get<T>(int id) where T : DEntry
         {
             if (!_entries.TryGetValue(id, out var entry))
                 return null;
@@ -53,7 +58,7 @@ namespace DesignTable.Core
             return entry as T;
         }
 
-        protected T GetByStrIdInternal<T>(string strId) where T : DEntry
+        public T Get<T>(string strId) where T : DEntry
         {
             if (!_entriesByStrId.TryGetValue(strId, out var entry))
                 return null;

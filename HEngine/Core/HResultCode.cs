@@ -1,16 +1,27 @@
-﻿namespace HEngine.Core;
-
-public enum HResultCode
+﻿namespace HEngine.Core
 {
-    Success = 0,
-    Error = 1,
-    InvalidArgument,
+    public enum HResultCode
+    {
+        Success = 0,
+        Error = 1,
+        InvalidArgument,
+        NotImplemented,
     
-    // CheatSpotlight
-    CheatSpotlightStart = 1001,
-    CheatSpotlightNotFoundCommand,
-    CheatSpotlightInvalidOption,
-    CheatSpotlightEnd = 1100,
+        // CheatSpotlight
+        CheatSpotlightStart = 1001,
+        CheatSpotlightNotFoundCommand,
+        CheatSpotlightInvalidOption,
+        CheatSpotlightEnd = 1100,
+        
+        // Dialog
+        DialogStart = 1101,
+        DialogNotFound,
+        DialogEnd = 1200,
     
-    // 10000~ application error codes
+        // Episode
+        EpisodeStart = 10000,
+        EpisodeNotFoundPhase,
+        EpisodeNotProgressing,
+        EpisodeEnd = 10100,
+    }   
 }

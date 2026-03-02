@@ -2,12 +2,13 @@ using System.Collections.Generic;
 
 namespace DesignTable.Core
 {
-    public interface IDParsedObject
+    public interface IdParsedObject
     {
         int GetId();
         string GetStrId();
     
         string GetString(string fieldName);
+        bool GetBool(string fieldName);
     
         int GetInt(string fieldName);
         long GetLong(string fieldName);
@@ -16,6 +17,6 @@ namespace DesignTable.Core
 
         IEnumerable<string> GetStrArray(string fieldName);
         IEnumerable<int> GetIntArray(string fieldName);
-        IEnumerable<IDParsedObject> GetObjArray(string fieldName);
+        IEnumerable<IdParsedObject> GetObjArray(string fieldName);
     }
 }

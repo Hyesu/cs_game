@@ -54,6 +54,17 @@ namespace HFin.Cell
 
             return new(qInt, rInt);
         }   
+        
+        public static Vector3 ToWorldPosByFlatTop(this HCellIndex cellIndex, float hexRadius)
+        {
+            var q = cellIndex.Row;
+            var r = cellIndex.Col;
+
+            var x = hexRadius * (Math.Sqrt(3f) * q + Math.Sqrt(3f) / 2f * r);
+            var y = hexRadius * (3f / 2f * r);
+
+            return new((float)x, 0f, (float)y);
+        }
     }
 }
 

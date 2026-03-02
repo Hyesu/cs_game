@@ -12,35 +12,48 @@ namespace HUnity.Core
         private HInputCommand _command;
         
         private HDragAndDropEventListener _dragAndDropListener;
-        private bool _active = true;
+        private bool _activeKeyInput = true;
+        private bool _activeMouseInput = true;
         
-        public bool IsActive => _active;
+        public bool IsActiveKeyInput => _activeKeyInput;
+        public bool IsActiveMouseInput => _activeMouseInput;
 
         public void Initialize()
         {
             // TODO: 키맵 설정을 통해 할 수 있도록 해야 함
-            _keyCommands.Add(Key.W, HInputCommand.Up);
-            _keyCommands.Add(Key.A, HInputCommand.Left);
-            _keyCommands.Add(Key.S, HInputCommand.Down);
-            _keyCommands.Add(Key.D, HInputCommand.Right);
+            _keyUpCommands.Add(Key.UpArrow, HInputCommand.Up);
+            _keyUpCommands.Add(Key.LeftArrow, HInputCommand.Left);
+            _keyUpCommands.Add(Key.DownArrow, HInputCommand.Down);
+            _keyUpCommands.Add(Key.RightArrow, HInputCommand.Right);
             
-            _keyUpCommands.Add(Key.R, HInputCommand.Rotation);
+            _keyUpCommands.Add(Key.Backquote, HInputCommand.Cheat);
         }
 
-        public void Update(float dt)
+        public bool Update(float dt)
         {
-            ProduceCommands();
+            return ProduceCommands();
         }
 
-        public void Activate(bool active)
+        public void ActivateMouseInput(bool active)
         {
-            if (active == _active)
+            if (active == _activeMouseInput)
             {
                 return;
             }
             
-            _active = active;
-            Debug.Log($"input controller activated({!_active} -> {_active})");
+            _activeMouseInput = active;
+            Debug.Log($"mouse input activated({!_activeKeyInput} -> {_activeKeyInput})");
+        }
+
+        public void ActivateKeyInput(bool active)
+        {
+            if (active == _activeKeyInput)
+            {
+                return;
+            }
+            
+            _activeKeyInput = active;
+            Debug.Log($"key input activated({!_activeKeyInput} -> {_activeKeyInput})");
         }
 
         public HInputCommand FlushCommands()
@@ -51,53 +64,58 @@ namespace HUnity.Core
             return command;
         }
 
-        private void ProduceCommands()
+        private bool ProduceCommands()
         {
-            // key inputs
-            foreach (var (key, cmd) in _keyCommands)
+            if (IsActiveKeyInput)
             {
-                if (Keyboard.current[key].isPressed)
+                foreach (var (key, cmd) in _keyCommands)
                 {
-                    _command |= cmd;
+                    if (Keyboard.current[key].isPressed)
+                    {
+                        _command |= cmd;
+                    }
+                }
+            
+                foreach (var (key, cmd) in _keyUpCommands)
+                {
+                    if (Keyboard.current[key].wasReleasedThisFrame)
+                    {
+                        _command |= cmd;
+                    }
                 }
             }
-            
-            // key up inputs
-            foreach (var (key, cmd) in _keyUpCommands)
-            {
-                if (Keyboard.current[key].wasReleasedThisFrame)
-                {
-                    _command |= cmd;
-                }
-            }
-            
-            // mouse inputs
-            if (!EventSystem.current.IsPointerOverGameObject())
-            {
-                if (Mouse.current.leftButton.isPressed)
-                {
-                    _command |= HInputCommand.MouseLeftDown;
-                    _dragAndDropListener?.Press(Mouse.current.position.value);
-                }
-                if (Mouse.current.leftButton.wasPressedThisFrame)
-                {
-                    _dragAndDropListener?.Press(Mouse.current.position.value);
-                }
-                if (Mouse.current.leftButton.wasReleasedThisFrame)
-                {
-                    _command |= HInputCommand.MouseLeftUp;
-                    _dragAndDropListener?.Release(Mouse.current.position.value);
-                }
 
-                if (Mouse.current.rightButton.isPressed)
+            if (IsActiveMouseInput)
+            {
+                if (!EventSystem.current.IsPointerOverGameObject())
                 {
-                    _command |= HInputCommand.MouseRightDown;
-                }
-                if (Mouse.current.rightButton.wasReleasedThisFrame)
-                {
-                    _command |= HInputCommand.MouseRightUp;
+                    if (Mouse.current.leftButton.isPressed)
+                    {
+                        _command |= HInputCommand.MouseLeftDown;
+                        _dragAndDropListener?.Press(Mouse.current.position.value);
+                    }
+                    if (Mouse.current.leftButton.wasPressedThisFrame)
+                    {
+                        _dragAndDropListener?.Press(Mouse.current.position.value);
+                    }
+                    if (Mouse.current.leftButton.wasReleasedThisFrame)
+                    {
+                        _command |= HInputCommand.MouseLeftUp;
+                        _dragAndDropListener?.Release(Mouse.current.position.value);
+                    }
+
+                    if (Mouse.current.rightButton.isPressed)
+                    {
+                        _command |= HInputCommand.MouseRightDown;
+                    }
+                    if (Mouse.current.rightButton.wasReleasedThisFrame)
+                    {
+                        _command |= HInputCommand.MouseRightUp;
+                    }
                 }
             }
+
+            return _command != HInputCommand.None;
         }
 
         public void AddDragAndDropListener(HDragAndDropEventListener listener)

@@ -1,16 +1,19 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using DesignTable.Core;
 using DesignTable.Types;
 using HEngine.Core;
 using HUnity.Core;
 using HUnity.Extensions;
 using HUnity.Systems;
+using Object = UnityEngine.Object;
 
 namespace HUnity.UI
 {
     public class HPresenter
     {
         public PresenterType Type { get; protected set; }
+        public event Action OnClosed;
         
         protected GameObject ViewObj;
         protected DContext D;
@@ -55,6 +58,7 @@ namespace HUnity.UI
 
         protected virtual void OnDestructed()
         {
+            OnClosed?.Invoke();
         }
 
         public void Attach(Transform parentTransform)

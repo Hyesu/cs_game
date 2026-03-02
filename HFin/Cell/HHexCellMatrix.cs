@@ -16,6 +16,7 @@ namespace HFin.Cell
         
         public int CellCount => _cells.Count;
         public IEnumerable<T> Cells => _cells.Values;
+        public IEnumerable<HCellIndex> Indices => _cells.Keys;
 
         public HHexCellMatrix(float radius)
         {

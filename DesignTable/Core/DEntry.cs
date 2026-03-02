@@ -8,13 +8,13 @@ namespace DesignTable.Core
         public readonly int Id;
         public readonly string StrId;
 
-        public DEntry(IDParsedObject parsedObject)
+        public DEntry(IdParsedObject parsedObject)
         {
             Id = parsedObject.GetId();
             StrId = parsedObject.GetStrId();
         }
 
-        public virtual void Initialize(IDParsedObject parsedObject)
+        public virtual void Initialize(IdParsedObject parsedObject)
         {
             throw new InvalidOperationException($"not implemented ency-entry");
         }

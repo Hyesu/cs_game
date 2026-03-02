@@ -16,7 +16,7 @@ namespace HFin.Cell
         }
 
         public bool Equals(HCellIndex other) => Row == other.Row && Col == other.Col;
-        public override bool Equals(object? obj) => obj is HCellIndex other && Equals(other);
+        public override bool Equals(object obj) => obj is HCellIndex other && Equals(other);
 
         public override int GetHashCode()
         {

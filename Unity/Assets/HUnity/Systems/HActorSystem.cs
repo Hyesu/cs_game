@@ -68,7 +68,7 @@ namespace HUnity.Systems
             }
             
             var id = _idGenerator.Increment();
-            var actor = new HGameActor(id, dActor, _rootObj.transform);
+            var actor = new HGameActor(HGameInstance.GetInstance(), id, dActor, _rootObj.transform);
             actor.Initialize();
             _actors.Add(id, actor);
             

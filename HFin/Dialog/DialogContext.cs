@@ -112,10 +112,9 @@ namespace HFin.Dialog
 
             var nextIdx = ActiveIdx + 1;
             var jumpKey = ActiveSpeech?.JumpKey;
-            var jumpSpeech = _dDlg.FindSpeech(jumpKey);
-            if (null != jumpSpeech)
+            if (!string.IsNullOrEmpty(jumpKey))
             {
-                nextIdx = _dDlg.Speeches.IndexOf(jumpSpeech);
+                nextIdx = _dDlg.FindSpeechIndex(jumpKey);
             }
 
             return Jump(nextIdx);

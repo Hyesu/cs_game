@@ -16,5 +16,6 @@ namespace HUnity.Core
         MouseRightUp = 1 << 13,
         // contents
         Rotation = 1 << 14,
+        Cheat = 1 << 15,
     }   
 }

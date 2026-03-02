@@ -6,7 +6,7 @@ using DesignTable.Core;
 
 namespace DesignTable.Parser
 {
-    public class DXmlParsedObject : IDParsedObject
+    public class DXmlParsedObject : IdParsedObject
     {
         private readonly XElement _element;
         private readonly int _id;
@@ -34,6 +34,11 @@ namespace DesignTable.Parser
             return _element.Attribute(fieldName)?.Value ?? string.Empty;
         }
 
+        public bool GetBool(string fieldName)
+        {
+            return bool.TryParse(GetString(fieldName), out var result) && result;
+        }
+        
         public int GetInt(string fieldName)
         {
             return int.Parse(GetString(fieldName));
@@ -57,7 +62,8 @@ namespace DesignTable.Parser
         public IEnumerable<string> GetStrArray(string fieldName)
         {
             return GetString(fieldName)
-                .Split(";");
+                .Split("|")
+                .Where(x => !string.IsNullOrEmpty(x));
         }
 
         public IEnumerable<int> GetIntArray(string fieldName)
@@ -66,7 +72,7 @@ namespace DesignTable.Parser
                 .Select(int.Parse);
         }
 
-        public IEnumerable<IDParsedObject> GetObjArray(string fieldName)
+        public IEnumerable<IdParsedObject> GetObjArray(string fieldName)
         {
             throw new NotSupportedException($"not supported object array in xml parser");
         }

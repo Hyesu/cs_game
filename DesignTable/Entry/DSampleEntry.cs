@@ -7,7 +7,7 @@ namespace DesignTable.Entry
         public readonly int NumberField;
         public readonly string StringField;
 
-        public DSampleEntry(IDParsedObject parsedObject)
+        public DSampleEntry(IdParsedObject parsedObject)
             : base(parsedObject)
         {
             NumberField = parsedObject.GetInt("NumberField");

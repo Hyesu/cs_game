@@ -6,7 +6,7 @@ namespace Feature.Inventory
     {
         private readonly Dictionary<int, T> _inventory = new();
 
-        public T? Find(int dataId)
+        public T Find(int dataId)
         {
             return _inventory.GetValueOrDefault(dataId);
         }

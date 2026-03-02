@@ -5,7 +5,7 @@ using DesignTable.Core;
 
 namespace DesignTable.Parser
 {
- public class DJsonParsedObject : IDParsedObject
+ public class DJsonParsedObject : IdParsedObject
  {
      private readonly JObject _json;
      
@@ -43,6 +43,11 @@ namespace DesignTable.Parser
          }
  
          return value.ToString();
+     }
+
+     public bool GetBool(string fieldName)
+     {
+         return bool.TryParse(GetString(fieldName), out var result) && result;
      }
  
      public int GetInt(string fieldName)
@@ -82,11 +87,11 @@ namespace DesignTable.Parser
              .Select(int.Parse);
      }
  
-     public IEnumerable<IDParsedObject> GetObjArray(string fieldName)
+     public IEnumerable<IdParsedObject> GetObjArray(string fieldName)
      {   
          if (!_json.TryGetValue(fieldName, out var value))
          {
-             return Enumerable.Empty<IDParsedObject>();
+             return Enumerable.Empty<IdParsedObject>();
          }
  
          return value.ToArray()
