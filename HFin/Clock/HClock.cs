@@ -16,31 +16,42 @@ public class HClock
         _totalTicks = totalTicks;
     }
 
-    public long TotalTicks => 0;
-    public long TotalDays => 0;
-    public int TodayTicks => 0;
+    public long TotalTicks => _totalTicks;
+    public long TotalDays => _totalTicks / _maxTickOfFullDay;
+    public long TodayTicks => _totalTicks - TotalDays * _maxTickOfFullDay;
 
-    public bool IsDaytime => false;
-    public int DayTicks => 0;
-    public int NightTicks => 0;
+    public bool IsDaytime => TodayTicks < _maxTickOfDaytime;
+    public long DayTicks => IsDaytime ? TodayTicks : 0;
+    public long NightTicks => !IsDaytime ? TodayTicks - _maxTickOfDaytime : 0;
 
     public HClock AddTicks(int ticks)
     {
+        _totalTicks += ticks;
         return this;
     }
 
     public HClock AddFullDays(int numberOfFullDay)
     {
+        _totalTicks += numberOfFullDay * _maxTickOfFullDay;
         return this;
     }
 
     public HClock NextDayNightCycle()
     {
+        if (IsDaytime)
+        {
+            _totalTicks += _maxTickOfDaytime - DayTicks;
+        }
+        else
+        {
+            _totalTicks += _maxTickOfNight - NightTicks;
+        }
         return this;
     }
 
     public HClock NextDay()
     {
+        _totalTicks += _maxTickOfFullDay - TodayTicks;
         return this;
     }
 }
