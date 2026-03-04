@@ -9,6 +9,7 @@ public class HHexCellMatrixTests
     class TestCell : IHCell
     {
         public readonly Vector3 Center;
+        public bool IsTraversable { get; set; } = true;
 
         public TestCell(Vector3 center)
         {
@@ -166,8 +167,72 @@ public class HHexCellMatrixTests
             var prevSegment = path[i];
             var nextSegment = path[i + 1];
             var distance = Vector2.Distance(prevSegment, nextSegment);
-            
+
             Assert.That(distance, Is.LessThanOrEqualTo(2 * matrix.Radius));
+        }
+    }
+
+    [Test(Description = "이동 불가 셀로 인한 경로 차단")]
+    public void TestFindPath_BlockedByUntraversable()
+    {
+        // 셀 배치 (반지름 1f 기준):
+        //   NW  NE
+        //  W  C  E
+        //   SW  SE
+        var cellCenter = new TestCell(new(0f, 0f, 0f));
+        var cellE = new TestCell(new(1.732f, 0, 0));
+        var cellNe = new TestCell(new(0.866f, 1.5f, 0));
+        var cellNw = new TestCell(new(-0.866f, 1.5f, 0));
+        var cellW = new TestCell(new(-1.732f, 0, 0));
+        var cellSw = new TestCell(new(-0.866f, -1.5f, 0));
+        var cellSe = new TestCell(new(0.866f, -1.5f, 0));
+
+        var matrix = new HHexCellMatrix<TestCell>(1f);
+        matrix.Add([cellCenter, cellE, cellNe, cellNw, cellW, cellSw, cellSe]);
+
+        // 도착지가 이동 불가인 경우 경로를 찾을 수 없음
+        cellE.IsTraversable = false;
+        var pathFoundToDst = matrix.TryFindPath(cellCenter.GetCenter2D(), cellE.GetCenter2D(), out _);
+        Assert.That(pathFoundToDst, Is.False);
+
+        // W → E 경로에서 중간 경로가 모두 이동 불가인 경우 경로를 찾을 수 없음
+        cellE.IsTraversable = true;
+        cellCenter.IsTraversable = false;
+        cellNe.IsTraversable = false;
+        cellSe.IsTraversable = false;
+        var pathFoundViaDetour = matrix.TryFindPath(cellW.GetCenter2D(), cellE.GetCenter2D(), out _);
+        Assert.That(pathFoundViaDetour, Is.False);
+    }
+
+    [Test(Description = "이동 불가 셀을 우회하는 경로 탐색")]
+    public void TestFindPath_DetourAroundUntraversable()
+    {
+        // 셀 배치 (반지름 1f 기준):
+        //   NW  NE
+        //  W  C  E
+        //   SW  SE
+        var cellCenter = new TestCell(new(0f, 0f, 0f));
+        var cellE = new TestCell(new(1.732f, 0, 0));
+        var cellNe = new TestCell(new(0.866f, 1.5f, 0));
+        var cellNw = new TestCell(new(-0.866f, 1.5f, 0));
+        var cellW = new TestCell(new(-1.732f, 0, 0));
+        var cellSw = new TestCell(new(-0.866f, -1.5f, 0));
+        var cellSe = new TestCell(new(0.866f, -1.5f, 0));
+
+        var matrix = new HHexCellMatrix<TestCell>(1f);
+        matrix.Add([cellCenter, cellE, cellNe, cellNw, cellW, cellSw, cellSe]);
+
+        // Center 는 이동 불가지만, NW → NE 를 통한 우회 경로 존재: W → NW → NE → E
+        cellCenter.IsTraversable = false;
+        var pathFound = matrix.TryFindPath(cellW.GetCenter2D(), cellE.GetCenter2D(), out var path);
+        Assert.That(pathFound, Is.True);
+        Assert.That(path.First(), Is.EqualTo(cellW.GetCenter2D()));
+        Assert.That(path.Last(), Is.EqualTo(cellE.GetCenter2D()));
+
+        // 경로 상에 이동 불가 셀의 좌표가 포함되지 않음
+        foreach (var segment in path)
+        {
+            Assert.That(segment, Is.Not.EqualTo(cellCenter.GetCenter2D()));
         }
     }
 }

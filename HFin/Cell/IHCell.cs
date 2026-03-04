@@ -6,5 +6,6 @@ namespace HFin.Cell
     {
         Vector3 GetCenter();
         Vector2 GetCenter2D();
+        bool IsTraversable { get; }
     }   
 }
